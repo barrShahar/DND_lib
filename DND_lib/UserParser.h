@@ -14,7 +14,7 @@ public:
     UserParser& operator=(const UserParser& a_other) = delete;
     ~UserParser() = default;
 
-    std::optional<COMMAND> ParseUserInput(const std::string& a_untrusted);
+    std::optional<COMMAND> ParseCommand(const std::string& a_untrusted);
 private:
 
     std::unordered_map<std::string, COMMAND> m_stringToCommands;

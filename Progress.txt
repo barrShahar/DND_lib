@@ -1,0 +1,11 @@
+
+
+I also wanted to understand better the syntex in :
+		std::bind(&GameController::DrawRoom, this), // from GameController.cpp
+
+סיימתי את המצבים, עכשיו נשאר האקטיונס
+left and right works, should work on walk, and take. 
+then work on multiplayers. then on players intercation actions such as talk and shout.
+
+Ducomantion for adding Actions.  
+

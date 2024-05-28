@@ -35,20 +35,19 @@ static const char *DIRECTION_STRING[] =
     FOREACH_DIRECTION(GENERATE_STRING)
 };
 
-// States: Do not change order!! GameExecuter depends on it
+// States: Do not change order!! GameController depends on it
 enum class STATE 
 {
     DRAW_ROOM,
-    PRINT_USER_OPTIONS,
     WAITING_FOR_INPUT,
-    STRING_ACT,
+    EXECUTE_ACTION,
     GET_INPUT,
     HELP,
     ATTACK,
     EXIT
 };
 
-// Acts: Do not change order!! GameExecuter depends on it
+// Acts: Do not change order!! GameController depends on it
 #define FOREACH_COMMAND(COMMAND) \
         COMMAND(left)    \
         COMMAND(right)   \

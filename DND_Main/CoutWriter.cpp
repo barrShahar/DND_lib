@@ -18,4 +18,9 @@ void CoutWriter::Write(const char a_char)
 	m_os << a_char;
 }
 
+void CoutWriter::Endl()
+{
+	m_os << "\n";	
+}
+
 }	// game_server

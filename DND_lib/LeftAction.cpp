@@ -7,7 +7,7 @@ std::unique_ptr<ActionResponse> LeftAction::Act(Dungeon_mt& a_dungeon, Player& a
 {
     int currDirection = static_cast< int > (a_player.GetDirection());
     int directionCount = static_cast< int > (Direction::SIZE);
-    currDirection = (currDirection == 0) ? 3 : (currDirection - 1) % directionCount;
+    currDirection = (currDirection == 0) ? directionCount - 1 : (currDirection - 1) % directionCount;
 
     a_player.SetDirection(static_cast< Direction > (currDirection));
 

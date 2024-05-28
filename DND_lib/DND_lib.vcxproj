@@ -150,7 +150,7 @@
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon_mt.h" />
     <ClInclude Include="GameServer.h" />
-    <ClInclude Include="GameExecuter.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="GameParams.h" />
     <ClInclude Include="ObserverPlayer_mt.h" />
     <ClInclude Include="Player.h" />
@@ -173,7 +173,7 @@
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Dungeon_mt.cpp" />
     <ClCompile Include="GameServer.cpp" />
-    <ClCompile Include="GameExecuter.cpp" />
+    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameParams.cpp" />
     <ClCompile Include="LeftAction.cpp" />
     <ClCompile Include="LookAction.cpp" />

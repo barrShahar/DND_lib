@@ -12,6 +12,8 @@ public:
 
 	virtual void Write(const std::string& a_str) override;
 	virtual void Write(const char a_char) override;
+	virtual void Endl() override;
+
 private:
 	std::ostream& m_os;
 };

@@ -13,6 +13,8 @@ public:
 
     virtual void Write(const std::string& a_str) = 0;
     virtual void Write(const char a_char) = 0;
+    virtual void Endl() = 0;
+
     Writer& operator<<(const std::string& a_str);
     Writer& operator<<(const char a_char);
 

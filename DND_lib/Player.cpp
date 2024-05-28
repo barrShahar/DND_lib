@@ -14,7 +14,8 @@ Player::Player(const std::string& a_name,
 
 void Player::NotifyPlayer(const std::string & a_message)
 {
-	m_writer << a_message << "\n";
+	m_writer << a_message;
+	m_writer.Endl();
 }
 
 

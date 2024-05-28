@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include "DND_lib/GameExecuter.h"
+#include "DND_lib/GameController.h"
 #include "DND_lib/Player.h"
 #include "CinReader.h"
 #include "CoutWriter.h"
@@ -18,7 +18,7 @@ int main()
     // Dungeon_mt object will be reponsible ...
     dnd_game::Dungeon_mt dungeon_mt {};
     dnd_game::Player player { "tmp name", coutW };  // tmp player for debugging
-    dnd_game::GameExecuter gameExe { coutW, cinR, dungeon_mt, player };
+    dnd_game::GameController gameExe { coutW, cinR, dungeon_mt, player };
     gameExe.Execute();
     
 }

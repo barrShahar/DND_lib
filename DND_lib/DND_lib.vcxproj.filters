@@ -63,7 +63,7 @@
     <ClInclude Include="Dungeon_mt.h">
       <Filter>Header Files\Dungeon</Filter>
     </ClInclude>
-    <ClInclude Include="GameExecuter.h">
+    <ClInclude Include="GameController.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -122,7 +122,7 @@
     <ClCompile Include="ascii\Grid.cpp">
       <Filter>Source Files\ascii</Filter>
     </ClCompile>
-    <ClCompile Include="GameExecuter.cpp">
+    <ClCompile Include="GameController.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">

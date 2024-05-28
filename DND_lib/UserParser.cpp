@@ -10,7 +10,7 @@ UserParser::UserParser()
 	}
 }
 
-std::optional<COMMAND> UserParser::ParseUserInput(const std::string& a_untrusted)
+std::optional<COMMAND> UserParser::ParseCommand(const std::string& a_untrusted)
 {
 	decltype(m_stringToCommands)::iterator it = m_stringToCommands.find(a_untrusted);
 	return (it != m_stringToCommands.end()) ? std::optional<COMMAND>(it->second) : std::nullopt;

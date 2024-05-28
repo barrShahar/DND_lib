@@ -39,7 +39,7 @@ void Grid::Print(Writer& a_writer) const
             //}
             a_writer << m_grid[x + y * m_maxX];
         }
-        a_writer << "\n";
+        a_writer.Endl();
     }
 }
 
