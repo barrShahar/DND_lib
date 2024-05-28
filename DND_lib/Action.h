@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "ActionResponse.h"
 #include "Dungeon_mt.h"
-
+#include "TextActionResponse.h"
 // This header file defines Action base class
 // and all the Actions classes derived from
 

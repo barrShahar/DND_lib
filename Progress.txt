@@ -9,3 +9,22 @@ then work on multiplayers. then on players intercation actions such as talk and 
 
 Ducomantion for adding Actions.  
 
+איפה אני מאתחל את האקטשיון הזה? אולי אפשר פשוט לתת לו את המבוך וזה בקונסטרקטור? לעשות איזה פקטורי? 
+
+So I decided to do the walking logic in class dungeon, Now I'm thinking how to return the reply to act, how did I
+do it before?
+
+// TODO: Unregister and reregister the player to the next room 
+
+Should editing the player members should be in the dungeon class? I think not!
+
+I remember there is a nice way to do assertion that throw a text, this should be change:
+const Number Wall::GetNextRoomNumber() const
+{
+    assert(IsDoor());
+    if (!IsDoor())
+    {
+        throw std::logic_error("GetNextRoomNumber() called on a non-door wall");
+    }
+    return m_nextRoomNumber;
+} // and it doesnt make sense to throw something after an assertion

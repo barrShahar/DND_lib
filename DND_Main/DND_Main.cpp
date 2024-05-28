@@ -17,7 +17,7 @@ int main()
 
     // Dungeon_mt object will be reponsible ...
     dnd_game::Dungeon_mt dungeon_mt {};
-    dnd_game::Player player { "tmp name", coutW };  // tmp player for debugging
+    dnd_game::Player player { "tmp name", dnd_game::Dungeon_mt::entryRoom, coutW };  // tmp player for debugging
     dnd_game::GameController gameExe { coutW, cinR, dungeon_mt, player };
     gameExe.Execute();
     

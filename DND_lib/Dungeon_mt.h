@@ -15,6 +15,7 @@ class Dungeon_mt
 {
     // Dungeon_mt assuming subject and observer calsses are thread safe
 public:
+    static const int entryRoom = 0;
     explicit Dungeon_mt();
     Dungeon_mt(const Dungeon_mt& a_other) = delete;
     Dungeon_mt& operator=(const Dungeon_mt& a_other) = delete;
@@ -22,7 +23,8 @@ public:
 
 
     void DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection);
-    Number Walk_mt(Number a_roomNumber, Direction a_direction);
+    std::string Walk_mt(Player& a_player);
+    std::optional<std::string> isPathBlocked(const Room& a_room, Direction a_playerDirection) const;
     void NotifyRoom(Number a_roomNumber, const std::string& a_message);
 
     bool IsMonsterInTheRoom(Number a_roomNumber);

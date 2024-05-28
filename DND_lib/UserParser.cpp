@@ -1,7 +1,7 @@
 #include "UserParser.h"
 namespace dnd_game
 {
-UserParser::UserParser()
+UserCommandParser::UserCommandParser()
 	: m_stringToCommands {}
 {
 	for (size_t i = 0; i < static_cast< size_t >(COMMAND::SIZE); ++i)
@@ -10,7 +10,7 @@ UserParser::UserParser()
 	}
 }
 
-std::optional<COMMAND> UserParser::ParseCommand(const std::string& a_untrusted)
+std::optional<COMMAND> UserCommandParser::ParseCommand(const std::string& a_untrusted)
 {
 	decltype(m_stringToCommands)::iterator it = m_stringToCommands.find(a_untrusted);
 	return (it != m_stringToCommands.end()) ? std::optional<COMMAND>(it->second) : std::nullopt;

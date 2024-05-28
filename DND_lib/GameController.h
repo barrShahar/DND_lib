@@ -17,7 +17,7 @@ tmp includes
 
 namespace dnd_game
 {
-// This class serves as the controller that manages the state and actions of the game,
+// This class manages the state and actions of the game,
 // utilizing the Strategy design pattern to handle different game actions.
 using ActMap = std::unordered_map<COMMAND, std::unique_ptr<Action>>;
 
@@ -108,16 +108,16 @@ private:
     Writer& m_writer;
     Reader& m_reader;
     Player& m_player;
-    UserParser m_parser;
+    UserCommandParser m_userCommandParser;
 
     // State management variables
     STATE m_currentState;
     ActMap m_actions;
-    std::optional<COMMAND> m_currCommand;
-    std::unordered_map<COMMAND, STATE> m_mapCommandToState;
+    std::optional<COMMAND> m_currentCommand;
+    std::unordered_map<COMMAND, STATE> m_commandStateMap;
 
     // State (machine) functions 
-    std::vector <std::function<STATE()>> m_statesFunctionPointers;
+    std::vector <std::function<STATE()>> m_stateFunctions;
     STATE DrawRoom();
     STATE WaitingForInput();
     STATE ExecuteAction();

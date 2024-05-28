@@ -158,6 +158,7 @@
     <ClInclude Include="Room.h" />
     <ClInclude Include="StringActionResponse.h" />
     <ClInclude Include="SubjectRoom_mt.h" />
+    <ClInclude Include="TextActionResponse.h" />
     <ClInclude Include="UserParser.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Writer.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="SubjectRoom_mt.cpp" />
     <ClCompile Include="TakeAction.cpp" />
     <ClCompile Include="TalkAction.cpp" />
+    <ClCompile Include="TextActionResponse.cpp" />
     <ClCompile Include="UserParser.cpp" />
     <ClCompile Include="WalkAction.cpp" />
     <ClCompile Include="Wall.cpp" />

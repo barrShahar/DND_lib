@@ -14,11 +14,11 @@ GameController::GameController(Writer & a_writer,
 	, m_dungeon { a_dungeon }
 	, m_player { a_player }
 	, m_currentState { STATE::DRAW_ROOM }
-	, m_parser {}
-	, m_mapCommandToState {}
+	, m_userCommandParser {}
+	, m_commandStateMap {}
 	, m_actions {}
-	, m_currCommand { std::nullopt }
-	, m_statesFunctionPointers {
+	, m_currentCommand { std::nullopt }
+	, m_stateFunctions {
 		std::bind(&GameController::DrawRoom, this),
 		std::bind(&GameController::WaitingForInput, this),
 		std::bind(&GameController::ExecuteAction, this),
@@ -36,16 +36,16 @@ GameController::GameController(Writer & a_writer,
 	m_actions[COMMAND::attack] = std::make_unique<AttackAction>();
 
 	// Initialize state mappings for commands
-	m_mapCommandToState[COMMAND::left] = STATE::EXECUTE_ACTION;
-	m_mapCommandToState[COMMAND::right] = STATE::EXECUTE_ACTION;
-	m_mapCommandToState[COMMAND::walk] = STATE::EXECUTE_ACTION;
-	m_mapCommandToState[COMMAND::talk] = STATE::GET_INPUT;
-	m_mapCommandToState[COMMAND::shout] = STATE::GET_INPUT;
-	m_mapCommandToState[COMMAND::look] = STATE::EXECUTE_ACTION;
-	m_mapCommandToState[COMMAND::take] = STATE::EXECUTE_ACTION;
-	m_mapCommandToState[COMMAND::help] = STATE::HELP;
-	m_mapCommandToState[COMMAND::attack] = STATE::ATTACK;
-	m_mapCommandToState[COMMAND::quit] = STATE::EXIT;
+	m_commandStateMap[COMMAND::left] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::right] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::walk] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::talk] = STATE::GET_INPUT;
+	m_commandStateMap[COMMAND::shout] = STATE::GET_INPUT;
+	m_commandStateMap[COMMAND::look] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::take] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::help] = STATE::HELP;
+	m_commandStateMap[COMMAND::attack] = STATE::ATTACK;
+	m_commandStateMap[COMMAND::quit] = STATE::EXIT;
 }
 
 
@@ -56,7 +56,7 @@ void GameController::Execute()
 	while (currState != STATE::EXIT)
 	{
 		// Execute the current state's function and update currState
-		currState = m_statesFunctionPointers[static_cast< Number >(currState)]();
+		currState = m_stateFunctions[static_cast< Number >(currState)]();
 	}
 
 	m_writer << "Write Test in Execute\n";
@@ -92,21 +92,21 @@ STATE GameController::WaitingForInput()
 	//	return STATE::EXIT;
 	//}
 
-	m_currCommand = m_parser.ParseCommand(untrustedUserCommand);
-	if (m_currCommand.has_value())
+	m_currentCommand = m_userCommandParser.ParseCommand(untrustedUserCommand);
+	if (m_currentCommand.has_value())
 	{
-		return m_mapCommandToState.at(m_currCommand.value());
+		return m_commandStateMap.at(m_currentCommand.value());
 	}
 	return STATE::WAITING_FOR_INPUT;
 }
 
 STATE GameController::ExecuteAction()
 {
-	assert(m_currCommand.has_value());
-	std::unique_ptr<ActionResponse> respone = m_actions.at(m_currCommand.value()).get()->Act(m_dungeon, m_player);
+	assert(m_currentCommand.has_value());
+	std::unique_ptr<ActionResponse> respone = m_actions.at(m_currentCommand.value()).get()->Act(m_dungeon, m_player);
 
 	// Reset current command
-	m_currCommand = std::nullopt;
+	m_currentCommand = std::nullopt;
 
 	GameController::DrawRoom();
 

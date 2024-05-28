@@ -99,6 +99,9 @@
     <ClInclude Include="SubjectRoom_mt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextActionResponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DND_lib.cpp">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="AttackAction.cpp">
       <Filter>Source Files\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="TextActionResponse.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

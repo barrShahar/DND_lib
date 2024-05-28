@@ -6,13 +6,13 @@
 
 namespace dnd_game
 {
-class UserParser
+class UserCommandParser
 {
 public:
-    explicit UserParser();
-    UserParser(const UserParser& a_other) = delete;
-    UserParser& operator=(const UserParser& a_other) = delete;
-    ~UserParser() = default;
+    explicit UserCommandParser();
+    UserCommandParser(const UserCommandParser& a_other) = delete;
+    UserCommandParser& operator=(const UserCommandParser& a_other) = delete;
+    ~UserCommandParser() = default;
 
     std::optional<COMMAND> ParseCommand(const std::string& a_untrusted);
 private:

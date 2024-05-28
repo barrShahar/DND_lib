@@ -21,29 +21,36 @@ void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_player
 	m_rooms.at(a_roomNum).DrawRoom(a_writer, a_playerDirection);
 }
 
-Number Dungeon_mt::Walk_mt(Number a_roomNumber, Direction a_direction)
+std::string Dungeon_mt::Walk_mt(Player& a_player)
 {
-	const Room& room = m_rooms[a_roomNumber];
+	const Direction playerDirection = a_player.GetDirection();
+	const Room& currentRoom = m_rooms[a_player.GetRoomNumber()];
 
-	Number direction = static_cast< Number > (a_direction);
-
-	// If the walk is a valid move, return the number of the next room. otherwise return the number of the current room
-	if (room.isDoor(a_direction))
+	if (!currentRoom.isDoor(playerDirection))
 	{
-		if (a_direction == Direction::NORTH && room.IsDragon())
-		{
-			return THERE_IS_A_DRAGON;
-		}
-		// Getting alias to the new room number for readability
-		const Number newRoomNumber = room.GetNextDoorRoomNumber(a_direction);
-
-		// Notify other players that reside in newRoom
-		// RoomMessage(newRoomNumber, a_name + " has entered the room\n");
-
-		// Returns new room number
-		return newRoomNumber;
+		return "There is no door in that direction!";
 	}
-	return a_roomNumber;
+
+	const std::optional<std::string> blockedPath = isPathBlocked(currentRoom, playerDirection);
+	if (blockedPath.has_value())
+	{
+		return blockedPath.value();
+	}
+
+	const Number newRoomNumber = currentRoom.GetNextDoorRoomNumber(playerDirection);
+
+	// TODO: Unregister and reregister the player to the next room
+
+	a_player.SetRoomNumber(newRoomNumber);
+
+	return "You are now entered room " + newRoomNumber;
+
+}
+
+std::optional<std::string> Dungeon_mt::isPathBlocked(const Room& a_room, Direction a_playerDirection) const
+{
+	// no obstacles designed yet
+	return std::nullopt;
 }
 
 void Dungeon_mt::NotifyRoom(Number a_roomNumber, const std::string& a_message)
