@@ -1,30 +1,27 @@
+I've finished the states, now the actions remain. Left and right work; I should work on walk and take next. Then, I'll work on multiplayer functionality and on player interaction actions such as talk and shout.
+
+Documentation for adding actions:
+
+Where should I initialize this action? Maybe I can just give it the dungeon in the constructor? Or should I create a factory for it?
+
+I decided to implement the walking logic in the Dungeon class. Now I'm thinking about how to return the reply to Act. How did I do it before?
 
 
-I also wanted to understand better the syntex in :
-		std::bind(&GameController::DrawRoom, this), // from GameController.cpp
+// TODO: Unregister and reregister the player to the next room
+Should editing the player members be done in the Dungeon class? I think not!
 
-סיימתי את המצבים, עכשיו נשאר האקטיונס
-left and right works, should work on walk, and take. 
-then work on multiplayers. then on players intercation actions such as talk and shout.
+I remember there is a nice way to do assertions that throw a text message. This should be changed:
 
-Ducomantion for adding Actions.  
 
-איפה אני מאתחל את האקטשיון הזה? אולי אפשר פשוט לתת לו את המבוך וזה בקונסטרקטור? לעשות איזה פקטורי? 
-
-So I decided to do the walking logic in class dungeon, Now I'm thinking how to return the reply to act, how did I
-do it before?
-
-// TODO: Unregister and reregister the player to the next room 
-
-Should editing the player members should be in the dungeon class? I think not!
-
-I remember there is a nice way to do assertion that throw a text, this should be change:
-const Number Wall::GetNextRoomNumber() const
-{
+const Number Wall::GetNextRoomNumber() const {
     assert(IsDoor());
-    if (!IsDoor())
-    {
+    if (!IsDoor()) {
         throw std::logic_error("GetNextRoomNumber() called on a non-door wall");
     }
     return m_nextRoomNumber;
-} // and it doesnt make sense to throw something after an assertion
+} // It doesn't make sense to throw something after an assertion
+Bugs: It seems that walk works and the player does go to a different room, but:
+
+The drawing of the room always shows room 0. fixed
+It says, "You've entered room," without specifying the number.
+ * fixed : there was needed a conversion from integer to string in order concatenation strings with operator +
