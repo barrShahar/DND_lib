@@ -105,13 +105,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)DND_Main;$(SolutionDir)DND_Main\Internet;$(SolutionDir)DND_Main\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DND_lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DND_lib.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,11 +135,23 @@
     <ClCompile Include="CoutWriter.cpp" />
     <ClCompile Include="DND_Main.cpp" />
     <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="Internet\AsyncNetworkHandler .cpp" />
+    <ClCompile Include="Internet\SimpleNet.Main.cpp" />
+    <ClCompile Include="Internet\SimpleNetMT.cpp" />
+    <ClCompile Include="Internet\UrlPathReader.cpp" />
+    <ClCompile Include="NetReader.cpp" />
+    <ClCompile Include="NetWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CinReader.h" />
     <ClInclude Include="CoutWriter.h" />
     <ClInclude Include="GameServer.h" />
+    <ClInclude Include="Internet\AsyncNetworkHandler.h" />
+    <ClInclude Include="Internet\BlockingQueueMT.h" />
+    <ClInclude Include="Internet\SimpleNetMT.h" />
+    <ClInclude Include="Internet\UrlPathReader.h" />
+    <ClInclude Include="NetReader.h" />
+    <ClInclude Include="NetWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

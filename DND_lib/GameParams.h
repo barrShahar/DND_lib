@@ -44,6 +44,7 @@ enum class STATE
     GET_INPUT,
     HELP,
     ATTACK,
+    CLEANUP,
     EXIT
 };
 

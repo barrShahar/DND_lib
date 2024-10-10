@@ -24,7 +24,9 @@ GameController::GameController(Writer & a_writer,
 		std::bind(&GameController::ExecuteAction, this),
 		std::bind(&GameController::GetUserInput, this),
 		std::bind(&GameController::Help, this),
-		std::bind(&GameController::AttackHandler, this) }
+		std::bind(&GameController::AttackHandler, this),
+		std::bind(&GameController::CleanUp, this)
+	}
 {	// Ctor initialize action mappings
 	m_actions[COMMAND::left] = std::make_unique<LeftAction>();
 	m_actions[COMMAND::right] = std::make_unique<RightAction>();
@@ -45,32 +47,22 @@ GameController::GameController(Writer & a_writer,
 	m_commandStateMap[COMMAND::take] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::help] = STATE::HELP;
 	m_commandStateMap[COMMAND::attack] = STATE::ATTACK;
-	m_commandStateMap[COMMAND::quit] = STATE::EXIT;
+	m_commandStateMap[COMMAND::quit] = STATE::CLEANUP;
 }
 
 
 
-void GameController::Execute()
+void GameController::Start()
 {
 	STATE currState = STATE::HELP;
 	while (currState != STATE::EXIT)
 	{
-		// Execute the current state's function and update currState
+		// Start the current state's function and update currState
 		currState = m_stateFunctions[static_cast< Number >(currState)]();
 	}
 
-	m_writer << "Write Test in Execute\n";
-	// Grid grid(ASCII_AXIS_X, ASCII_AXIS_Y);
-
-	Room room(NUMBER_ZERO, 
-			  { false, 0 }, 
-			  { true, 0 }, 
-			  { false, 0 }, 
-			  { true, 0 }, 
-			  false, 
-			  false);
-	room.DrawRoom(m_writer, Direction::NORTH);
-	/*m_dungeon.DrawRoom(m_writer, 0, Direction::NORTH);*/
+	m_writer << "Exit\n";
+	
 }
 
 
@@ -78,7 +70,7 @@ void GameController::Execute()
 
 STATE GameController::DrawRoom()
 {
-	m_dungeon.DrawRoom(m_writer, 0, m_player.GetDirection());
+	m_dungeon.DrawRoom(m_writer, m_player.GetRoomNumber(), m_player.GetDirection());
 	return STATE::WAITING_FOR_INPUT;
 }
 
@@ -127,19 +119,29 @@ STATE GameController::GetUserInput()
 
 STATE GameController::Help()
 {
-	std::cout << "This game supports the following commands:" << std::endl;
+	m_writer.Write("This game supports the following commands:");
+	m_writer.Endl();
 	for (size_t i = 0; i < static_cast< size_t > (COMMAND::SIZE); ++i)
 	{
-		std::cout << COMMAND_STRING[i] << std::endl;
+		m_writer.Write(COMMAND_STRING[i]);
+		m_writer.Endl();
 	}
-	std::cout << "Press any key to continue..." << std::endl;
-	std::cin.get();
+	m_writer.Write("Press any key to continue...");
+	m_reader.ReadLine();
+
 	return STATE::DRAW_ROOM;
 }
 
 STATE GameController::AttackHandler()
 {
 	return STATE();
+}
+
+STATE GameController::CleanUp()
+{
+	// Do cleanup if needed
+	m_writer << "Cleaing\n";
+	return STATE::EXIT;
 }
 
 

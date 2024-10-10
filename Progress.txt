@@ -1,6 +1,19 @@
-I've finished the states, now the actions remain. Left and right work; I should work on walk and take next. Then, I'll work on multiplayer functionality and on player interaction actions such as talk and shout.
 
-Documentation for adding actions:
+4. Check if you can use this comment:
+// m_actions: This map associates a user command (COMMAND enum) with 
+// a unique_ptr to an Action subclass.  The Action subclass implements 
+// the logic for handling that specific command.  
+// 
+// You can modify this map in the constructor to add or remove supported commands.
+
+
+3. ask gpt how to test class *_mt
+
+2. Learn the nets stuff, use chatgpt to understand what Yariv have done.
+
+1. Why the thread don't disconnect after exit? check that out.
+
+added a cleanup state, no use for that now. 
 
 Where should I initialize this action? Maybe I can just give it the dungeon in the constructor? Or should I create a factory for it?
 
@@ -13,6 +26,7 @@ Should editing the player members be done in the Dungeon class? I think not!
 I remember there is a nice way to do assertions that throw a text message. This should be changed:
 
 
+fixed:     assert(IsDoor() && "GetNextRoomNumber() called on a non-door wall");
 const Number Wall::GetNextRoomNumber() const {
     assert(IsDoor());
     if (!IsDoor()) {
@@ -20,8 +34,33 @@ const Number Wall::GetNextRoomNumber() const {
     }
     return m_nextRoomNumber;
 } // It doesn't make sense to throw something after an assertion
-Bugs: It seems that walk works and the player does go to a different room, but:
 
-The drawing of the room always shows room 0. fixed
+Bugs
+It seems that walk works and the player does go to a different room, but:
+
+The drawing of the room always shows room 0.
+Fixed: It was sending 0 to the drawRoom function.
 It says, "You've entered room," without specifying the number.
- * fixed : there was needed a conversion from integer to string in order concatenation strings with operator +
+Fixed: Conversion from integer to string was needed for string concatenation using the + operator.
+
+Done: Added documentation on how to create a new action.
+
+
+
+
+Further Considerations:
+Now I'm thinking about whose responsibility it is to check for obstacles. 
+Should it be the Room or Wall class? There should be a method to check for obstacles 
+(like dragons). The Dragon class should provide a message like, 
+"You can't continue, there is a dragon ahead, can't you see the sign?" 
+I will think more about this as I continue.ld farther think about that when I continue. 
+
+Explaination of how to start the project: 
+	Add the Winsock library to your project:
+
+	Open your project in Visual Studio.
+	Right-click on your project in the Solution Explorer and select Properties.
+	In the Property Pages dialog, navigate to Configuration Properties > Linker > Input.
+	In the Additional Dependencies field, add Ws2_32.lib.
+
+

@@ -25,11 +25,8 @@ const bool Wall::IsDoor() const
 
 const Number Wall::GetNextRoomNumber() const
 {
-    assert(IsDoor());
-    if (!IsDoor())
-    {
-        throw std::logic_error("GetNextRoomNumber() called on a non-door wall");
-    }
+    assert(IsDoor() && "GetNextRoomNumber() called on a non-door wall");
+
     return m_nextRoomNumber;
 }
 

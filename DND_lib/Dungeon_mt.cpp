@@ -16,6 +16,11 @@ dnd_game::Dungeon_mt::Dungeon_mt()
 	// Ctor 
 }
 
+Number Dungeon_mt::GetEntryRoom() const
+{
+	return Dungeon_mt::entryRoom;
+}
+
 void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection)
 {
 	m_rooms.at(a_roomNum).DrawRoom(a_writer, a_playerDirection);
@@ -43,7 +48,7 @@ std::string Dungeon_mt::Walk_mt(Player& a_player)
 
 	a_player.SetRoomNumber(newRoomNumber);
 
-	return "You are now entered room " + newRoomNumber;
+	return "You've entered room " + std::to_string(newRoomNumber);
 
 }
 

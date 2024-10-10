@@ -13,9 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{956ab580-d287-471c-9a7e-0daf4217fa7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DND_Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CinReader.cpp">
@@ -24,8 +36,17 @@
     <ClCompile Include="CoutWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameServer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Internet\SimpleNet.Main.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Internet\SimpleNetMT.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Internet\UrlPathReader.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Internet\AsyncNetworkHandler .cpp">
+      <Filter>Source Files\net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +57,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Internet\AsyncNetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Internet\BlockingQueueMT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Internet\SimpleNetMT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Internet\UrlPathReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

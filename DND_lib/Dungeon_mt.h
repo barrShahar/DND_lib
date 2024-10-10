@@ -21,7 +21,7 @@ public:
     Dungeon_mt& operator=(const Dungeon_mt& a_other) = delete;
     ~Dungeon_mt() = default;
 
-
+    Number GetEntryRoom() const;
     void DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection);
     std::string Walk_mt(Player& a_player);
     std::optional<std::string> isPathBlocked(const Room& a_room, Direction a_playerDirection) const;
