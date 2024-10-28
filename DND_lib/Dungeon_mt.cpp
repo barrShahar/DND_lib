@@ -136,7 +136,7 @@ void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 //	return room.AttackDragon(a_dmg);
 //}
 
-std::optional<TREASURE> Dungeon_mt::GetTreasure(Number a_roomNumber)
+std::optional<TREASURE_TYPE> Dungeon_mt::GetTreasure(Number a_roomNumber)
 {
 	return 	m_rooms.at(a_roomNumber).GetTreasure_mt();
 }

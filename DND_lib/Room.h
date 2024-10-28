@@ -55,7 +55,7 @@ public:
     AttackDragonResponse AttackDragon(Number a_dmg);*/
 
 
-    std::optional<TREASURE> GetTreasure_mt();
+    std::optional<TREASURE_TYPE> GetTreasure_mt();
     void Register(Player& a_player);
     void Unregister(Player& a_player);
     void NotifyAll(const std::string& a_message);

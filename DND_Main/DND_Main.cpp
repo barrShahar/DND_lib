@@ -36,7 +36,7 @@ std::wstring GetPublicIp()
         return L"Error: Could not retrieve hostname.";  // Return wide string literal
     }
 
-    std::cout << "Hostname: " << hostname << std::endl;
+    //std::cout << "Hostname: " << hostname << std::endl;
 
     // Set up the hints structure for getaddrinfo()
     ZeroMemory(&hints, sizeof(hints));
@@ -66,7 +66,7 @@ std::wstring GetPublicIp()
     std::wcout.imbue(std::locale(""));
 
     // Use std::wcout to print wide characters
-    //std::wcout << L"IP Address: " << ipStringBuffer << std::endl;
+    std::wcout << L"IP Address: " << ipStringBuffer << std::endl;
 
     // Cleanup
     freeaddrinfo(result);
@@ -98,7 +98,8 @@ int main()
 
 #ifdef _DEBUG
 	//std::cout << "telnet 192.168.68.117 4010\n";
-	std::wcout << "telnet " << GetPublicIp() << std::endl;
+    std::wstring ip = GetPublicIp();
+	std::wcout << "telnet " << ip << " 4010" << std::endl;
 #endif // _DEBUG
 
 	for (std::thread& t : threads)

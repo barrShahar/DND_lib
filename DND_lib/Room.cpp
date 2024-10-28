@@ -87,24 +87,25 @@ Number Room::GetNextDoorRoomNumber(Direction a_direction) const
 //	return respone;
 //}
 
-std::optional<TREASURE> Room::GetTreasure_mt()
+std::optional<TREASURE_TYPE> Room::GetTreasure_mt()
 {
 	std::lock_guard<std::mutex> lock(m_treasureDragonMutex);
 	if (!m_isTreasure)
 	{
 		return std::nullopt;
 	}
+	// Return random type of treasure (random number from TREASURE_TYPE enume
 	// Seed the random number generator with a random device
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
 	// Define the range of random numbers
-	std::uniform_int_distribution<> dis(0, Number(TREASURE::SIZE) - 1);
+	std::uniform_int_distribution<> dis(0, Number(TREASURE_TYPE::SIZE) - 1);
 
 	// Generate a random number
 	int randomNum = dis(gen);
 	m_isTreasure = false;
-	return std::make_optional(static_cast< TREASURE >(randomNum));
+	return std::make_optional(static_cast< TREASURE_TYPE >(randomNum));
 }
 
 void Room::Register(Player& a_player)

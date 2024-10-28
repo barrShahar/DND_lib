@@ -154,11 +154,14 @@
     <ClInclude Include="GameParams.h" />
     <ClInclude Include="ObserverPlayer_mt.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="player_mt.h" />
     <ClInclude Include="Reader.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="StringActionResponse.h" />
     <ClInclude Include="SubjectRoom_mt.h" />
     <ClInclude Include="TextActionResponse.h" />
+    <ClInclude Include="Treasure.h" />
+    <ClInclude Include="TreasureBase.h" />
     <ClInclude Include="UserParser.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Writer.h" />
@@ -180,6 +183,7 @@
     <ClCompile Include="LookAction.cpp" />
     <ClCompile Include="ObserverPlayer_mt.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="player_mt.cpp" />
     <ClCompile Include="RightAction.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ShoutAction.cpp" />
@@ -188,6 +192,8 @@
     <ClCompile Include="TakeAction.cpp" />
     <ClCompile Include="TalkAction.cpp" />
     <ClCompile Include="TextActionResponse.cpp" />
+    <ClCompile Include="Treasure.cpp" />
+    <ClCompile Include="TreasureBase.cpp" />
     <ClCompile Include="UserParser.cpp" />
     <ClCompile Include="WalkAction.cpp" />
     <ClCompile Include="Wall.cpp" />

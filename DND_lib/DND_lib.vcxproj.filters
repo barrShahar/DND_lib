@@ -40,6 +40,12 @@
     <Filter Include="Source Files\Action">
       <UniqueIdentifier>{3dda51ab-f2fb-4643-aa02-e6c67d672323}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Dungeon\Monsters">
+      <UniqueIdentifier>{adcf5cb8-6e82-4139-8eea-66eeb2866ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dungeon\Treasures">
+      <UniqueIdentifier>{00ea8939-ae48-40da-a2fd-0ec2406acf1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Reader.h">
@@ -100,6 +106,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextActionResponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Treasure.h">
+      <Filter>Header Files\Dungeon\Treasures</Filter>
+    </ClInclude>
+    <ClInclude Include="player_mt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -186,6 +201,15 @@
       <Filter>Source Files\Action</Filter>
     </ClCompile>
     <ClCompile Include="TextActionResponse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Treasure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player_mt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

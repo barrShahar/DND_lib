@@ -9,6 +9,9 @@ Player::Player(const std::string& a_name,
 	, m_roomNumber { a_entryRoom }
 	, m_writer { a_writer }
 	, m_direction { Direction::NORTH }
+	, m_hp { INITIAL_HEALTH_POINTS }
+	, m_dmgP { INITIAL_ATTACK_POINTS }
+	, m_mutex {}
 {
 	// CTOR
 }
@@ -37,6 +40,16 @@ const Number Player::GetRoomNumber() const
 	return m_roomNumber;
 }
 
+const Number Player::GetHealthPoints() const
+{
+	return m_hp;
+}
+
+const Number Player::GetDmgPoints() const
+{
+	return m_dmgP;
+}
+
 // Setters
 void Player::SetDirection(Direction a_direction)
 {
@@ -46,6 +59,16 @@ void Player::SetDirection(Direction a_direction)
 void Player::SetRoomNumber(const Number a_roomNumber)
 {
 	m_roomNumber = a_roomNumber;
+}
+
+void Player::SetHealthPoints(const Number a_hp)
+{
+	m_hp = a_hp;
+}
+
+void Player::SetDmgPoints(const Number a_dmgP)
+{
+	m_dmgP = a_dmgP;
 }
 
 }	// dnd_game

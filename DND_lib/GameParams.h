@@ -76,13 +76,14 @@ static const char *COMMAND_STRING[] =
     FOREACH_COMMAND(GENERATE_STRING)
 };
 
-enum class TREASURE
+enum class TREASURE_TYPE
 {
     MAGIC_YOUTH_POTION,
     SWORD,
     GUN,
     SIZE
 };
+
 
 struct AttackPlayerResponse
 {

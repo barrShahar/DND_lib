@@ -38,7 +38,7 @@ public:
                                       Number a_dmg, Number a_attackLifePoints);
 
     AttackDragonResponse AttackDragon(Number a_roomNumber, Number a_dmg);
-    std::optional<TREASURE> GetTreasure(Number a_roomNumber);
+    std::optional<TREASURE_TYPE> GetTreasure(Number a_roomNumber);
 private:
     const Rooms CreateDungeon() const;
     std::mutex m_mtx;
