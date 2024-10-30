@@ -7,7 +7,9 @@ namespace dnd_game {
 std::unordered_map<TREASURE_TYPE, std::function<std::unique_ptr<Treasure>()>> treasureMap = {
     {TREASURE_TYPE::GUN, []() { return std::make_unique<TreasureGun>(); }},
     {TREASURE_TYPE::SWORD, []() { return std::make_unique<TreasureSword>(); }},
-    {TREASURE_TYPE::MAGIC_YOUTH_POTION, []() { return std::make_unique<TreasureHealingPotion>(); }}
+    {TREASURE_TYPE::MAGIC_YOUTH_POTION, []() { return std::make_unique<TreasureHealingPotion>(); }},
+    {TREASURE_TYPE::GUARDED, []() { return std::make_unique<GuardedTreasure>(); }}
+
 };
 
 Treasure::Treasure(std::string a_name)
@@ -29,6 +31,12 @@ TreasureHealingPotion::TreasureHealingPotion()
     // CTOR
 }
 
+GuardedTreasure::GuardedTreasure()
+    : Treasure { "Guarded Treasre" }
+{
+    // CTOR
+}
+
 void TreasureHealingPotion::operator()(Player & a_player)
 {
     std::string answer = DeclareMessage() + " ";
@@ -44,7 +52,7 @@ void TreasureSword::operator()(Player& player)
 {
     // Define the effect of the Sword on the Player here
     // For example:
-    std::string message = DeclareMessage();
+    std::string message = DeclareMessage() + " ";
     // Assuming some effect like increasing attack points
     player.SetDmgPoints(player.GetDmgPoints() + 10);
     message += AttackPointsIncreaed(player.GetDmgPoints() - 10, player.GetDmgPoints());
@@ -59,6 +67,12 @@ void TreasureGun::operator()(Player& player)
     player.SetDmgPoints(player.GetDmgPoints() + 20);
     message += AttackPointsIncreaed(player.GetDmgPoints() - 20, player.GetDmgPoints());
     m_reply = message;
+}
+
+
+void GuardedTreasure::operator()(Player & player)
+{
+    m_reply = "Treasure is gaurded and could not be obtained";
 }
 
 std::unique_ptr<Treasure> Treasure::TreasureFactory(TREASURE_TYPE type)
@@ -101,6 +115,5 @@ TreasureGun::TreasureGun()
 {
     // CTOR
 }
-
 
 } // namespace dnd_game

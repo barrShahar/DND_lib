@@ -67,7 +67,7 @@ private:
     Walls m_walls;
     Number m_roomNumber;
     SubjectRoom_mt m_subject;
-    bool m_isDragon;
+    bool m_isMonster;
     bool m_isTreasure;
     Dragon m_dragon;
     mutable std::mutex m_treasureDragonMutex;

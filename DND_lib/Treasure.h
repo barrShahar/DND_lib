@@ -63,5 +63,11 @@ public:
     virtual void operator()(Player& player) override;
 };
 
+class GuardedTreasure : public Treasure
+{
+public:
+    explicit GuardedTreasure();
+    virtual void operator()(Player& player) override;
+};
 
 }	// dnd_game

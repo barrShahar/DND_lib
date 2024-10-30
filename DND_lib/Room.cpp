@@ -9,7 +9,7 @@ Room::Room(Number a_roomNumber,
 		   std::pair<bool, Number> a_isDoorWest,
 		   bool a_isDragon, bool a_isTreasure)
 	: // Initializer list
-	m_isDragon { a_isDragon },
+	m_isMonster { a_isDragon },
 	m_isTreasure { a_isTreasure },
 	m_roomNumber { a_roomNumber },
 	m_dragon {},
@@ -24,7 +24,7 @@ Room::Room(Number a_roomNumber,
 }
 
 Room::Room(const Room & a_other)
-	: m_isDragon { a_other.m_isDragon }
+	: m_isMonster { a_other.m_isMonster }
 	, m_isTreasure { a_other.m_isTreasure }
 	, m_roomNumber { a_other.m_roomNumber }
 	, m_walls { a_other.m_walls }
@@ -44,7 +44,7 @@ void Room::DrawRoom(Writer& a_wrier, Direction a_direction)
 		m_walls.at(1).IsDoor(),
 		m_walls.at(2).IsDoor(),
 		m_walls.at(3).IsDoor(),
-		m_isDragon,
+		m_isMonster,
 		m_isTreasure };
 	dungRoom.Draw(canvas, a_direction, ASCII_AXIS_X, ASCII_AXIS_Y);
 	canvas.Print(a_wrier);
@@ -68,7 +68,7 @@ Number Room::GetNextDoorRoomNumber(Direction a_direction) const
 //AttackDragonResponse Room::AttackDragon(Number a_dmg)
 //{
 //	std::lock_guard<std::mutex> lock(m_treasureDragonMutex);
-//	if (!m_isDragon)
+//	if (!m_isMonster)
 //	{
 //		AttackDragonResponse respone;
 //		respone.m_damageToPlayer = 0;
@@ -82,7 +82,7 @@ Number Room::GetNextDoorRoomNumber(Direction a_direction) const
 //	respone.m_dragonRemainingLife = m_dragon.GetLifePoints();
 //	if (!m_dragon.IsAlive())
 //	{
-//		m_isDragon = false;
+//		m_isMonster = false;
 //	}
 //	return respone;
 //}
@@ -94,6 +94,12 @@ std::optional<TREASURE_TYPE> Room::GetTreasure_mt()
 	{
 		return std::nullopt;
 	}
+
+	if (m_isMonster)
+	{
+		return TREASURE_TYPE::GUARDED;
+	}
+
 	// Return random type of treasure (random number from TREASURE_TYPE enume
 	// Seed the random number generator with a random device
 	std::random_device rd;
@@ -131,7 +137,7 @@ Room::Iterator Room::begin()
 bool Room::IsDragon() const
 {
 	std::lock_guard<std::mutex> lock(m_treasureDragonMutex);
-	return m_isDragon;
+	return m_isMonster;
 }
 
 bool Room::IsTreasure() const

@@ -81,7 +81,8 @@ enum class TREASURE_TYPE
     MAGIC_YOUTH_POTION,
     SWORD,
     GUN,
-    SIZE
+    SIZE,                // The total number of obtainable treasure types
+    GUARDED              // Special case: the treasure is guarded and cannot be obtained directly
 };
 
 

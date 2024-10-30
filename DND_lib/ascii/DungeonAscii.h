@@ -46,7 +46,7 @@ private:
     bool m_right;
     bool m_down;
     bool m_left;
-    bool m_isDragon;
+    bool m_isMonster;
     bool m_isTreasure;
 };
 }  // namespace dnd_game

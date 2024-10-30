@@ -18,7 +18,7 @@ dnd_game::Dungeon_mt::Dungeon_mt()
 
 Number Dungeon_mt::GetEntryRoom() const
 {
-	return Dungeon_mt::entryRoom;
+	return Dungeon_mt::ENTRY_ROOM;
 }
 
 void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection)
