@@ -62,7 +62,6 @@ void GameController::Start()
 	}
 
 	m_writer << "Exit\n";
-	
 }
 
 
@@ -78,11 +77,6 @@ STATE GameController::DrawRoom()
 STATE GameController::WaitingForInput()
 {
 	const std::string untrustedUserCommand = m_reader.ReadLine();
-
-	//if (!m_player.IsAlive())
-	//{
-	//	return STATE::EXIT;
-	//}
 
 	m_currentCommand = m_userCommandParser.ParseCommand(untrustedUserCommand);
 	if (m_currentCommand.has_value())

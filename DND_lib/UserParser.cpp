@@ -10,9 +10,9 @@ UserCommandParser::UserCommandParser()
 	}
 }
 
-std::optional<COMMAND> UserCommandParser::ParseCommand(const std::string& a_untrusted)
+std::optional<COMMAND> UserCommandParser::ParseCommand(const std::string& a_untrusted) const
 {
-	decltype(m_stringToCommands)::iterator it = m_stringToCommands.find(a_untrusted);
+	decltype(m_stringToCommands)::const_iterator it = m_stringToCommands.find(a_untrusted);	// using auto was forbidden in this project
 	return (it != m_stringToCommands.end()) ? std::optional<COMMAND>(it->second) : std::nullopt;
 }
 

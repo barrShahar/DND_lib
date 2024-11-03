@@ -2,7 +2,7 @@
 #include "GameParams.h"
 namespace dnd_game
 {
-// One of 4 walls of Room.h class
+// One of 4 walls of Room_mt.h class
 class Wall
 {
 public:

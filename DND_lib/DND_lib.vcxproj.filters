@@ -93,12 +93,6 @@
     <ClInclude Include="StringActionResponse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DungeonMonster.h">
-      <Filter>Header Files\Dungeon</Filter>
-    </ClInclude>
-    <ClInclude Include="Dragon.h">
-      <Filter>Header Files\Dungeon</Filter>
-    </ClInclude>
     <ClInclude Include="ObserverPlayer_mt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -116,6 +110,12 @@
     </ClInclude>
     <ClInclude Include="player_mt.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>Header Files\Dungeon\Monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Header Files\Dungeon\Monsters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

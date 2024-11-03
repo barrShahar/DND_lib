@@ -146,7 +146,7 @@
     <ClInclude Include="ActionResponse.h" />
     <ClInclude Include="ascii\DungeonAscii.h" />
     <ClInclude Include="ascii\Grid.h" />
-    <ClInclude Include="DungeonMonster.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon_mt.h" />
     <ClInclude Include="GameServer.h" />

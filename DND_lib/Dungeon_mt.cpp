@@ -1,5 +1,6 @@
 #include "Dungeon_mt.h"
 #include "GameParams.h"
+#include <cassert>
 
 
 #include <vector>
@@ -9,7 +10,7 @@
 namespace dnd_game
 {
 dnd_game::Dungeon_mt::Dungeon_mt()
-	: m_dungeonGaurd {}
+	: m_dungeonGuard {}
 	, m_mtx {}
 	, m_rooms { CreateDungeon() }
 {
@@ -29,58 +30,59 @@ void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_player
 std::string Dungeon_mt::Walk_mt(Player& a_player)
 {
 	const Direction playerDirection = a_player.GetDirection();
-	const Room& currentRoom = m_rooms[a_player.GetRoomNumber()];
+	Room_mt& currentRoom = m_rooms[a_player.GetRoomNumber()];
 
 	if (!currentRoom.isDoor(playerDirection))
 	{
 		return "There is no door in that direction!";
 	}
 
-	const std::optional<std::string> blockedPath = isPathBlocked(currentRoom, playerDirection);
-	if (blockedPath.has_value())
+	const std::optional<Number> newRoomNumber = currentRoom.GetNextDoorRoomNumber(playerDirection);
+	if (!newRoomNumber.has_value())
 	{
-		return blockedPath.value();
+		return "Path is blocked";
 	}
 
-	const Number newRoomNumber = currentRoom.GetNextDoorRoomNumber(playerDirection);
 
-	// TODO: Unregister and reregister the player to the next room
+	currentRoom.Unregister(a_player);	// Unregister player(observer) from the subject(room)
+	m_rooms[newRoomNumber.value()].Register(a_player);	// Register player to the next room
+	a_player.SetRoomNumber(newRoomNumber.value());	
+	
 
-	a_player.SetRoomNumber(newRoomNumber);
-
-	return "You've entered room " + std::to_string(newRoomNumber);
+	return "You've entered room " + std::to_string(newRoomNumber.value());
 
 }
 
-std::optional<std::string> Dungeon_mt::isPathBlocked(const Room& a_room, Direction a_playerDirection) const
-{
-	// no obstacles designed yet
-	return std::nullopt;
-}
 
 void Dungeon_mt::NotifyRoom(Number a_roomNumber, const std::string& a_message)
 {
-	Room& room = m_rooms.at(a_roomNumber);
+	Room_mt& room = m_rooms.at(a_roomNumber);
 	room.NotifyAll(a_message);
+}
+
+void Dungeon_mt::NotifyRoomOthers(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message)
+{
+	Room_mt& room = m_rooms.at(a_roomNumber);
+	room.NotifyAllExcept(a_excludedPlayer, a_message);
 }
 
 
 
 bool Dungeon_mt::IsMonsterInTheRoom(Number a_roomNumber)
 {
-	return m_rooms.at(a_roomNumber).IsDragon();
+	return m_rooms.at(a_roomNumber).ContainsMonster();
 }
 
 std::string Dungeon_mt::GetNames(Number a_roomNumber) const
 {
-	const Room& room = m_rooms.at(a_roomNumber);
+	const Room_mt& room = m_rooms.at(a_roomNumber);
 	std::string names = room.GetNames();
 	return room.GetNames();
 }
 
 void Dungeon_mt::ShoutAction(Number a_roomNumber, const std::string& a_message)
 {
-	Room& room = m_rooms.at(a_roomNumber);
+	Room_mt& room = m_rooms.at(a_roomNumber);
 	for (Wall& wall : room)
 	{
 		if (wall.IsDoor())
@@ -93,12 +95,6 @@ void Dungeon_mt::ShoutAction(Number a_roomNumber, const std::string& a_message)
 
 void Dungeon_mt::RegisterPlayer(Player& a_player, Number a_roomNumber)
 {
-	/*
-	NotifyRoom(a_player.GetRoomNumber(), a_player.GetName() + " has entered the room!");
-	m_rooms.at(a_roomNumber).Register(a_player);
-	*/
-	// do assert a_play.GetRoomNumber() == a_roomNumber? 
-	NotifyRoom(a_roomNumber, a_player.GetName() + " has entered the room!");
 	m_rooms.at(a_roomNumber).Register(a_player);
 }
 
@@ -113,7 +109,7 @@ void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 //											  Number a_dmg, Number a_attackLifePoints)
 //{
 //	// TODO: Find player through subject and attack him
-//	Room& room = m_rooms.at(a_roomNumber);
+//	Room_mt& room = m_rooms.at(a_roomNumber);
 //	AttackPlayerResponse info = room.AttackPlayer(a_attackedName, a_dmg);
 //	Number lifePoints = (a_attackLifePoints > info.GetDamageToThisPlayer()) ?
 //		a_attackLifePoints - info.GetDamageToThisPlayer() : NUMBER_ZERO;
@@ -132,7 +128,7 @@ void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 
 //AttackDragonResponse Dungeon_mt::AttackDragon(Number a_roomNumber, Number a_dmg)
 //{
-//	Room& room = m_rooms.at(a_roomNumber);
+//	Room_mt& room = m_rooms.at(a_roomNumber);
 //	return room.AttackDragon(a_dmg);
 //}
 
@@ -148,21 +144,21 @@ const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 	Number roomNumber = 0;
 	Rooms rooms // return value
 	{
-		Room { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true },
-		Room { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false },
-		Room { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true },
-		Room { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true },
-		Room { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true },
-		Room { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false },
-		Room { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false },
-		Room { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true },
+		Room_mt { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true },
+		Room_mt { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false },
+		Room_mt { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true },
+		Room_mt { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true },
+		Room_mt { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true },
+		Room_mt { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false },
+		Room_mt { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false },
+		Room_mt { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true },
 	};
 	return rooms;
 	/*
-		std::queue<std::unique_ptr<Room>> unexploredRooms;
+		std::queue<std::unique_ptr<Room_mt>> unexploredRooms;
 	Number roomNum = 0;
 	// Create First room
-	unexploredRooms.push(std::make_unique<Room>
+	unexploredRooms.push(std::make_unique<Room_mt>
 	(
 		roomNum, std::make_pair(true, ++roomNum),
 		std::make_pair(false, -1),
@@ -175,10 +171,10 @@ const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 	while (!unexploredRooms.empty())
 	{
 		// Dequeue room
-		std::unique_ptr<Room>& roomToExplore = unexploredRooms.front();
+		std::unique_ptr<Room_mt>& roomToExplore = unexploredRooms.front();
 
 		// For every open door in room, create another room:
-		for (Room::Iterator it = roomToExplore->begin(); it != roomToExplore->end(); ++it)
+		for (Room_mt::Iterator it = roomToExplore->begin(); it != roomToExplore->end(); ++it)
 		{
 			if ((*it).IsDoor())
 			{
@@ -216,7 +212,7 @@ std::pair<bool,Number> getRandomBool_mt(double a_probability, Number& a_num)
 	return isDoor ? std::make_pair(isDoor, ++a_num) : std::make_pair(isDoor, Number(0));
 }
 
-std::unique_ptr<Room> CreateRoom(Number& a_roomNumber)
+std::unique_ptr<Room_mt> CreateRoom(Number& a_roomNumber)
 {
 	std::array<std::pair<bool,Number>, 4> bools;
 	std::generate(bools.begin(), bools.end(), [&] ()
@@ -224,7 +220,7 @@ std::unique_ptr<Room> CreateRoom(Number& a_roomNumber)
 					  return getRandomBool_mt(IS_DOOR_PROBABILITY, a_roomNumber);
 				  });
 
-	Room
+	Room_mt
 	{
 	a_roomNumber,
 	bools.at(0),
@@ -235,7 +231,7 @@ std::unique_ptr<Room> CreateRoom(Number& a_roomNumber)
 	getRandomBool_mt(IS_TREASURE_PROBABILITY)
 	};
 
-	std::unique_ptr<Room> returnValue = std::make_unique<Room>(
+	std::unique_ptr<Room_mt> returnValue = std::make_unique<Room_mt>(
 		a_roomNumber,
 		bools.at(0),
 		bools.at(1),

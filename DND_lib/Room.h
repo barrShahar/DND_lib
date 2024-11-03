@@ -9,11 +9,12 @@
 #include "GameParams.h"
 #include "SubjectRoom_mt.h"
 #include "Dragon.h"
+#include <shared_mutex>
 namespace dnd_game
 {
 
 // Dungeon room
-class Room
+class Room_mt
 {
 public:
     using Walls = std::array<Wall, 4>;
@@ -32,7 +33,7 @@ public:
         Walls::iterator m_it;
     };
 
-    explicit Room(Number a_roomNumber,
+    explicit Room_mt(Number a_roomNumber,
                   std::pair<bool, Number> a_isDoorNorth,
                   std::pair<bool, Number> a_isDoorEast,
                   std::pair<bool, Number> a_isDoorSouth,
@@ -40,16 +41,16 @@ public:
                   bool a_isDragon,
                   bool a_isTreasure);
 
-    Room(const Room& a_other);
-    Room& operator=(const Room& a_other) = delete;
-    ~Room() = default;
+    Room_mt(const Room_mt& a_other);
+    Room_mt& operator=(const Room_mt& a_other) = delete;
+    ~Room_mt() = default;
 
     std::string GetNames() const;
     void DrawRoom(Writer& a_wrier, Direction a_direction);
     bool isDoor(Direction a_direction) const;
-    bool IsDragon() const;
+    bool ContainsMonster() const;
     bool IsTreasure() const;
-    Number GetNextDoorRoomNumber(Direction a_direction) const;
+    std::optional<Number> GetNextDoorRoomNumber(Direction a_direction) const;
 
  /*   AttackPlayerResponse AttackPlayer(const std::string& a_attackedName, Number a_dmg);
     AttackDragonResponse AttackDragon(Number a_dmg);*/
@@ -59,6 +60,7 @@ public:
     void Register(Player& a_player);
     void Unregister(Player& a_player);
     void NotifyAll(const std::string& a_message);
+    void NotifyAllExcept(const Player& a_excludedPlayer, const std::string& a_message);
 
     Iterator begin();
     Iterator end();
@@ -67,9 +69,10 @@ private:
     Walls m_walls;
     Number m_roomNumber;
     SubjectRoom_mt m_subject;
-    bool m_isMonster;
+    bool m_containsMonster;
     bool m_isTreasure;
     Dragon m_dragon;
-    mutable std::mutex m_treasureDragonMutex;
+
+    mutable std::shared_mutex m_mutex;  // Mutex for thread safety
 };
 }  // namespace dnd_game

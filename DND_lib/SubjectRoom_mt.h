@@ -18,7 +18,7 @@ public:
 
     virtual void Register(Player& a_player);
     virtual void Unregister(Player& a_player);
-
+    virtual void NotifyAllExcept(const Player& a_player, const std::string& a_message);
     virtual void NotifyAll(const std::string& a_message);
     //AttackPlayerResponse AttackPlayer(const std::string& a_playerToAttack, Number a_dmg);
 private:

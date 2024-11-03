@@ -45,7 +45,7 @@ void GameServer::WaitForClient()
 		}
 		catch (const simplenet::SimpleNetMT::ConnectionClosed&)
 		{
-			// unregister player!
+			// unregister player
 			m_dungeon.UnregisterPlayer(player, player.GetRoomNumber());
 			std::cout << "CLOSED\n";
 		}

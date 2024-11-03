@@ -13,6 +13,7 @@ std::unique_ptr<ActionResponse> LeftAction::Act(Dungeon_mt& a_dungeon, Player& a
 
     std::stringstream responseMessage;
     responseMessage << "You are now facing " << DIRECTION_STRING[static_cast< Number >(a_player.GetDirection())];
+    a_dungeon.NotifyRoomOthers(a_player, a_player.GetRoomNumber(), a_player.GetName() + " turned left");
 
     return std::make_unique<StringActionResponse>(responseMessage.str());
 }

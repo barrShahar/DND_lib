@@ -11,7 +11,7 @@
 namespace dnd_game
 {
 
-using Rooms = std::vector<Room>;
+using Rooms = std::vector<Room_mt>;
 
 class Dungeon_mt
 {
@@ -26,8 +26,8 @@ public:
     Number GetEntryRoom() const;
     void DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection);
     std::string Walk_mt(Player& a_player);
-    std::optional<std::string> isPathBlocked(const Room& a_room, Direction a_playerDirection) const;
     void NotifyRoom(Number a_roomNumber, const std::string& a_message);
+    void NotifyRoomOthers(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message);
 
     bool IsMonsterInTheRoom(Number a_roomNumber);
     std::string GetNames(Number a_roomNumber) const;
@@ -43,8 +43,8 @@ public:
     std::optional<TREASURE_TYPE> GetTreasure(Number a_roomNumber);
 private:
     const Rooms CreateDungeon() const;
-    std::mutex m_mtx;
-    std::condition_variable m_dungeonGaurd;
+    mutable std::mutex m_mtx;
+    std::condition_variable m_dungeonGuard;
     Rooms m_rooms;
 };
 }  // dnd_game

@@ -25,8 +25,7 @@ void SubjectRoom_mt::Unregister(Player& a_player)
 {
 	{	// gaurd
 		std::lock_guard<std::mutex> lock(m_roomMutex);
-		for (Map::iterator it = m_observersMap.begin();
-			 it != m_observersMap.end(); ++it)
+		for (Map::iterator it = m_observersMap.begin(); it != m_observersMap.end(); ++it)
 		{
 			if ((*it).second.get()->IsEqual(a_player))
 			{
@@ -37,11 +36,25 @@ void SubjectRoom_mt::Unregister(Player& a_player)
 	}
 }
 
+void SubjectRoom_mt::NotifyAllExcept(const Player& a_player, const std::string& a_message)
+{
+	{	// gaurd
+		std::lock_guard<std::mutex> lock(m_roomMutex);
+		for (std::pair<std::string const, std::unique_ptr<ObserverPlayer_mt>>& pair : m_observersMap)
+		{
+			if (pair.first != a_player.GetName())
+			{
+				pair.second.get()->Notify(a_message);
+			}
+		}
+	}
+}
+
 void SubjectRoom_mt::NotifyAll(const std::string& a_message)
 {
 	std::pair< std::string, std::unique_ptr<ObserverPlayer_mt>> f;
 	{	// gaurd
-		std::lock_guard<std::mutex> lock(m_roomMutex); // This was commented but I think I need it
+		std::lock_guard<std::mutex> lock(m_roomMutex); 
 		for (std::pair<std::string const, std::unique_ptr<ObserverPlayer_mt>>& pair : m_observersMap)
 		{
 			pair.second.get()->Notify(a_message);

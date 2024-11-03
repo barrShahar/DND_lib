@@ -12,7 +12,7 @@ dnd_game::DungeonAscii::DungeonAscii(bool a_up,
 	, m_right { a_right }
 	, m_down { a_down }
 	, m_left { a_left }
-	, m_isMonster { a_isDragon }
+	, m_containsMonster { a_isDragon }
 	, m_isTreasure { a_isTreasure }
 {
 	// Ctor
@@ -53,7 +53,7 @@ void dnd_game::DungeonAscii::Draw(Grid& a_canvas, Direction a_direction, int a_b
 	int DRAGON_BASE_Y = yUp + 1;
 	int DRAGON_BASE_X = a_baseX / 2 - DRAGON_LENGTH / 2 ;
 
-	if (m_isMonster)
+	if (m_containsMonster)
 	{
 		// Draw dragon
 		int DRAGON_BASE_Y = yUp + 1;
