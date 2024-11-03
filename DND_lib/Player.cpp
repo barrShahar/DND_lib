@@ -7,6 +7,7 @@ Player::Player(const std::string& a_name,
 			   Writer& a_writer)
 	: m_name { a_name }
 	, m_roomNumber { a_entryRoom }
+	, m_commandArguemnts { }
 	, m_writer { a_writer }
 	, m_direction { Direction::NORTH }
 	, m_hp { INITIAL_HEALTH_POINTS }
@@ -69,6 +70,11 @@ void Player::SetHealthPoints(const Number a_hp)
 void Player::SetDmgPoints(const Number a_dmgP)
 {
 	m_dmgP = a_dmgP;
+}
+
+void Player::SetArguments(std::string a_commandArguemnts)
+{
+	m_commandArguemnts = a_commandArguemnts;
 }
 
 }	// dnd_game

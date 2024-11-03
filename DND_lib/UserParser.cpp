@@ -1,4 +1,6 @@
 #include "UserParser.h"
+#include <sstream>
+
 namespace dnd_game
 {
 UserCommandParser::UserCommandParser()
@@ -10,10 +12,42 @@ UserCommandParser::UserCommandParser()
 	}
 }
 
-std::optional<COMMAND> UserCommandParser::ParseCommand(const std::string& a_untrusted) const
+ParsedCommand UserCommandParser::ParseCommand(const std::string& a_untrusted) const
 {
-	decltype(m_stringToCommands)::const_iterator it = m_stringToCommands.find(a_untrusted);	// using auto was forbidden in this project
-	return (it != m_stringToCommands.end()) ? std::optional<COMMAND>(it->second) : std::nullopt;
+	std::istringstream stream(a_untrusted);
+	std::string commandString;
+	stream >> commandString;  // Extract the command
+
+	decltype(m_stringToCommands)::const_iterator it = m_stringToCommands.find(commandString); 
+
+	std::string message;
+	std::getline(stream, message);  // Capture the remaining input as the message
+
+	if (it != m_stringToCommands.end())
+	{
+		return {std::optional<COMMAND>(it->second), message};
+	}
+	
+	// else
+	return { std::nullopt, "" };
+}
+
+
+ParsedCommand::ParsedCommand(std::optional<COMMAND> a_command, std::string a_arguments)
+	: m_command { a_command }
+	, m_arguments { a_arguments }
+{
+	// CTOR
+}
+
+std::optional<COMMAND> ParsedCommand::GetCommand()
+{
+	return m_command;
+}
+
+std::string ParsedCommand::GetArguments()
+{
+	return m_arguments;
 }
 
 }	// dnd_game

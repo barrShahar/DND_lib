@@ -34,9 +34,11 @@ public:
     void SetRoomNumber(Number a_roomNumber);
     void SetHealthPoints(Number a_hp);
     void SetDmgPoints(Number a_dmgP);
+    void SetArguments(std::string a_arguemnts);
 
 private:
     const std::string m_name;
+    std::string m_commandArguemnts;
     Direction m_direction;
     Writer& m_writer;
     Number m_roomNumber;

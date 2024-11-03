@@ -77,8 +77,10 @@ STATE GameController::DrawRoom()
 STATE GameController::WaitingForInput()
 {
 	const std::string untrustedUserCommand = m_reader.ReadLine();
+	ParsedCommand parsedCommand = m_userCommandParser.ParseCommand(untrustedUserCommand);
+	m_currentCommand = parsedCommand.GetCommand();
+	m_player.SetArguments(parsedCommand.GetArguments());
 
-	m_currentCommand = m_userCommandParser.ParseCommand(untrustedUserCommand);
 	if (m_currentCommand.has_value())
 	{
 		return m_commandStateMap.at(m_currentCommand.value());

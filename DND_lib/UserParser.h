@@ -6,6 +6,25 @@
 
 namespace dnd_game
 {
+
+class ParsedCommand
+{
+public:
+    ParsedCommand() = delete;
+    ParsedCommand(std::optional<COMMAND> a_command, std::string a_arguments);
+    ParsedCommand(const ParsedCommand& a_other) = delete;
+    ParsedCommand& operator=(const ParsedCommand& a_other) = delete;
+    ~ParsedCommand() = default;
+
+    std::optional<COMMAND> GetCommand();
+    std::string GetArguments();
+
+private:
+    std::optional<COMMAND> m_command;
+    std::string m_arguments;
+    
+};
+
 class UserCommandParser
 {
 public:
@@ -14,7 +33,7 @@ public:
     UserCommandParser& operator=(const UserCommandParser& a_other) = delete;
     ~UserCommandParser() = default;
 
-    std::optional<COMMAND> ParseCommand(const std::string& a_untrusted) const;
+    ParsedCommand ParseCommand(const std::string& a_untrusted) const;
 private:
 
     std::unordered_map<std::string, COMMAND> m_stringToCommands;
