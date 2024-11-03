@@ -27,7 +27,7 @@ public:
     void DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection);
     std::string Walk_mt(Player& a_player);
     void NotifyRoom(Number a_roomNumber, const std::string& a_message);
-    void NotifyRoomOthers(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message);
+    void NotifyRoomExcept(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message);
 
     bool IsMonsterInTheRoom(Number a_roomNumber);
     std::string GetNames(Number a_roomNumber) const;

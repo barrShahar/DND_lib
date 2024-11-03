@@ -28,6 +28,7 @@ public:
     const Number GetRoomNumber() const;
     const Number GetHealthPoints() const;
     const Number GetDmgPoints() const;
+    const std::string GetArguments() const;
 
     // Setters
     void SetDirection(Direction a_direction);

@@ -51,6 +51,11 @@ const Number Player::GetDmgPoints() const
 	return m_dmgP;
 }
 
+const std::string Player::GetArguments() const
+{
+	return m_commandArguemnts;
+}
+
 // Setters
 void Player::SetDirection(Direction a_direction)
 {

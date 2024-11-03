@@ -41,8 +41,8 @@ GameController::GameController(Writer & a_writer,
 	m_commandStateMap[COMMAND::left] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::right] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::walk] = STATE::EXECUTE_ACTION;
-	m_commandStateMap[COMMAND::talk] = STATE::GET_INPUT;
-	m_commandStateMap[COMMAND::shout] = STATE::GET_INPUT;
+	m_commandStateMap[COMMAND::talk] = STATE::EXECUTE_ACTION;
+	m_commandStateMap[COMMAND::shout] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::look] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::take] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::help] = STATE::HELP;

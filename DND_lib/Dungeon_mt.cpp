@@ -60,7 +60,7 @@ void Dungeon_mt::NotifyRoom(Number a_roomNumber, const std::string& a_message)
 	room.NotifyAll(a_message);
 }
 
-void Dungeon_mt::NotifyRoomOthers(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message)
+void Dungeon_mt::NotifyRoomExcept(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message)
 {
 	Room_mt& room = m_rooms.at(a_roomNumber);
 	room.NotifyAllExcept(a_excludedPlayer, a_message);
