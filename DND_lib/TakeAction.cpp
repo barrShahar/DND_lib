@@ -21,6 +21,10 @@ std::unique_ptr<ActionResponse> TakeAction::Act(Dungeon_mt &a_dungeon, Player& a
                             {
                                 (*treasure)(a_player);  // Call the effect on the player
                             }
+
+                            // Notify other players
+                            const std::string roomMessage = a_player.GetName() + " has taken the treasure!: " + treasure->GetName();
+                            a_dungeon.NotifyRoomExcept(a_player, a_player.GetRoomNumber(), roomMessage);
                         });
 
         return std::make_unique<StringActionResponse>(treasure->Get_Reply());

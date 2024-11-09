@@ -24,6 +24,7 @@ public:
     ~Dungeon_mt() = default;
 
     Number GetEntryRoom() const;
+    const Room_mt& GetRoom(Number a_roomNumber) const;
     void DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection);
     std::string Walk_mt(Player& a_player);
     void NotifyRoom(Number a_roomNumber, const std::string& a_message);

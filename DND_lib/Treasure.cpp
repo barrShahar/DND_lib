@@ -85,29 +85,34 @@ std::unique_ptr<Treasure> Treasure::TreasureFactory(TREASURE_TYPE type)
     return nullptr;  // Return nullptr if type not found
 }
 
-std::string Treasure::DeclareMessage()
+std::string Treasure::DeclareMessage() const
 {
     return "You've found a " + m_name + "!";
 }
 
 // Convert integers to strings for concatenation
-std::string Treasure::HpIncreased(int a_curr_hp, int a_hp)
+std::string Treasure::HpIncreased(int a_curr_hp, int a_hp) const
 {
     std::string message = "Your health points increased from " + std::to_string(a_curr_hp);
     message += " to " + std::to_string(a_hp);
     return message;
 }
 
-std::string Treasure::AttackPointsIncreaed(int a_currAttackPoints, int a_attackPoints)
+std::string Treasure::AttackPointsIncreaed(int a_currAttackPoints, int a_attackPoints) const
 {
     std::string message = "Your attack points increased from " + std::to_string(a_currAttackPoints);
     message += " to " + std::to_string(a_attackPoints);
     return message;
 }
 
-std::string Treasure::Get_Reply()
+std::string Treasure::Get_Reply() const
 {
     return m_reply;
+}
+
+std::string Treasure::GetName() const
+{
+    return m_name;
 }
 
 TreasureGun::TreasureGun()

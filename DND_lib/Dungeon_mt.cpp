@@ -22,6 +22,11 @@ Number Dungeon_mt::GetEntryRoom() const
 	return Dungeon_mt::ENTRY_ROOM;
 }
 
+const Room_mt& Dungeon_mt::GetRoom(Number a_roomNumber) const
+{
+	return m_rooms[a_roomNumber];
+}
+
 void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_playerDirection)
 {
 	m_rooms.at(a_roomNum).DrawRoom(a_writer, a_playerDirection);

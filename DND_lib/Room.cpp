@@ -188,6 +188,27 @@ Room_mt::Iterator Room_mt::end()
 	return Room_mt::Iterator(m_walls.end());
 }
 
+Room_mt::ConstIterator Room_mt::cbegin() const
+{
+	// CTOR
+	return Room_mt::ConstIterator(m_walls.cbegin());
+}
+
+Room_mt::ConstIterator Room_mt::cend() const
+{
+	return Room_mt::ConstIterator(m_walls.cend());
+}
+
+Room_mt::ConstIterator Room_mt::begin() const
+{
+	return cbegin();
+}
+
+Room_mt::ConstIterator Room_mt::end() const
+{
+	return cend();
+}
+
 Room_mt::Iterator::Iterator(const Walls::iterator& a_it)
 	: m_it { a_it }
 {
@@ -214,6 +235,35 @@ Room_mt::Iterator& Room_mt::Iterator::operator++()
 }
 
 Wall& Room_mt::Iterator::operator*()
+{
+	return *m_it;
+}
+
+Room_mt::ConstIterator::ConstIterator(Walls::const_iterator a_it)
+	: m_it { a_it }
+{
+	// CTOR
+}
+
+Room_mt::ConstIterator::ConstIterator(const ConstIterator& a_other)
+	: m_it{ a_other.m_it }
+{
+	// CPY-CTOR
+
+}
+
+bool Room_mt::ConstIterator::operator!=(const ConstIterator& a_other)
+{
+	return m_it != a_other.m_it;
+}
+
+Room_mt::ConstIterator& Room_mt::ConstIterator::operator++()
+{
+	++m_it;
+	return *this;
+}
+
+const Wall& Room_mt::ConstIterator::operator*() const
 {
 	return *m_it;
 }

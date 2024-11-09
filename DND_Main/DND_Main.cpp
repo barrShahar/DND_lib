@@ -14,6 +14,57 @@ using ThreadContainer = std::vector<std::thread>;
 static constexpr size_t MAX_USER_NUM = 4;
 #include <codecvt>  // For std::wstring_convert
 
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0A00 // For Windows 10
+#endif
+#include <boost/asio.hpp>
+#include <thread>
+#include "GameServer.h"
+
+static const int PORT = 4010;
+static const int MAX_THREAD_NUMBER = 4;
+std::wstring GetPublicIp();
+
+int main() {
+    try {
+        // Create an io_context object for handling asynchronous operations
+        boost::asio::io_context io_context;
+
+        // Create a GameServer object
+        GameServer server(io_context, PORT);
+
+#ifdef _DEBUG
+        //std::cout << "telnet 192.168.68.117 4010\n";
+        std::wstring ip = GetPublicIp();
+        std::wcout << "telnet " << ip << " 4010" << std::endl;
+#endif // _DEBUG
+
+        // Create threads and run io_context in each
+        std::vector<std::thread> thread_container;
+        for (int i = 0; i < MAX_THREAD_NUMBER; ++i) {
+            thread_container.emplace_back([&io_context, &server]() {
+                // Start accepting client connections
+                server.WaitForClient();
+                io_context.run();
+                });
+        }
+
+        // Join threads to main thread
+        for (auto& thread : thread_container) {
+            if (thread.joinable()) {
+                thread.join();
+            }
+        }
+    }
+    catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << "\n";
+    }
+
+    return 0;
+}
+
+
+
 std::wstring GetPublicIp()
 {
     WSADATA wsaData;
@@ -75,75 +126,3 @@ std::wstring GetPublicIp()
     // Return the IP address as a std::wstring
     return std::wstring(ipStringBuffer);
 }
-
-void NetServer(GameServer& a_gameServer)
-{
-
-	return;
-}
-
-int main()
-{
-	GameServer gameServer;
-
-	ThreadContainer threads;
-
-	for (size_t i = 0; i < MAX_USER_NUM; ++i)
-	{
-		threads.push_back(std::thread { [&gameServer]()
-		{
-			gameServer.WaitForClient();
-		} });
-	}
-
-#ifdef _DEBUG
-	//std::cout << "telnet 192.168.68.117 4010\n";
-    std::wstring ip = GetPublicIp();
-	std::wcout << "telnet " << ip << " 4010" << std::endl;
-#endif // _DEBUG
-
-	for (std::thread& t : threads)
-	{
-		//std::cout << "Waiting for other threads to die\n";
-		t.join();
-	}
-
-	return 0;
-}
-
-
-
-
-
-
-
-
-// DND_Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-/*
-
-#include <iostream>
-#include "DND_lib/GameController.h"
-#include "DND_lib/Player.h"
-#include "CinReader.h"
-#include "CoutWriter.h"
-#include "GameServer.h"
-
-//#include "DND_lib/Dungeon_mt.h"
-
-int main()
-{
-	// Allocate communication stream of type ostream and istream
-	game_server::CoutWriter coutW { std::cout };
-	game_server::CinReader cinR { std::cin };
-
-	// Dungeon_mt object will be reponsible ...
-	dnd_game::Dungeon_mt dungeon_mt {};
-	dnd_game::Player player { "tmp name", dnd_game::Dungeon_mt::ENTRY_ROOM, coutW };  // tmp player for debugging
-	dnd_game::GameController gameExe { coutW, cinR, dungeon_mt, player };
-	gameExe.Start();
-
-}
-
-
-*/

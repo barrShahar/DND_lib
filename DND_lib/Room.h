@@ -18,21 +18,6 @@ class Room_mt
 {
 public:
     using Walls = std::array<Wall, 4>;
-    class Iterator
-    {
-    public:
-        explicit Iterator(const Walls::iterator& a_it);
-        Iterator(const Iterator& a_other);
-        Iterator& operator=(const Iterator& a_other) = delete;
-        ~Iterator() = default;
-
-        bool operator!=(const Iterator& a_other);
-        Iterator& operator++();
-        Wall& operator*();
-    private:
-        Walls::iterator m_it;
-    };
-
     explicit Room_mt(Number a_roomNumber,
                   std::pair<bool, Number> a_isDoorNorth,
                   std::pair<bool, Number> a_isDoorEast,
@@ -62,8 +47,46 @@ public:
     void NotifyAll(const std::string& a_message);
     void NotifyAllExcept(const Player& a_excludedPlayer, const std::string& a_message);
 
+    class Iterator
+    {
+    public:
+        explicit Iterator(const Walls::iterator& a_it);
+        Iterator(const Iterator& a_other);
+        Iterator& operator=(const Iterator& a_other) = delete;
+        ~Iterator() = default;
+
+        bool operator!=(const Iterator& a_other);
+        Iterator& operator++();
+        Wall& operator*();
+    private:
+        Walls::iterator m_it;
+    };
+
+
     Iterator begin();
     Iterator end();
+
+    // ConstIterator for const iteration
+    class ConstIterator
+    {
+    public:
+        explicit ConstIterator(Walls::const_iterator a_it);
+        ConstIterator(const ConstIterator& a_other);
+        ConstIterator& operator=(const ConstIterator& a_other) = delete;
+        ~ConstIterator() = default;
+
+        bool operator!=(const ConstIterator& a_other);
+        ConstIterator& operator++();
+        const Wall& operator*() const;
+
+    private:
+        Walls::const_iterator m_it;
+    };
+
+    ConstIterator cbegin() const;
+    ConstIterator cend() const;
+    ConstIterator begin() const; // Const version for iteration
+    ConstIterator end() const;   // Const version for iteration
 
 private:
     Walls m_walls;

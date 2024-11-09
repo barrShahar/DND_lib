@@ -1,21 +1,26 @@
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0A00 // For Windows 10
+#endif
+
 #pragma once
 #include "DND_lib/Writer.h"
-#include "SimpleNetMT.h"
+#include <boost/asio.hpp>
+#include <memory>
+#include <string>
 
 class NetWriter : public dnd_game::Writer
 {
 public:
+    explicit NetWriter(boost::asio::ip::tcp::socket& a_socket);
+    NetWriter(const NetWriter& a_other) = delete;
+    NetWriter& operator=(const NetWriter& a_other) = delete;
+    virtual ~NetWriter() = default;
 
-	explicit NetWriter(simplenet::SimpleNetMT::Connection& a_connection);
-	NetWriter(const NetWriter& a_other) = delete;
-	const NetWriter& operator=(const NetWriter& a_other) = delete;
-	~NetWriter() = default;
-
-	virtual void Write(const std::string& a_str) override;
-	virtual void Write(const char a_char) override;
-	virtual void Endl() override;
+    // Implement virtual functions from Writer
+    virtual void Write(const std::string& a_str) override;
+    virtual void Write(const char a_char) override;
+    virtual void Endl() override;
 
 private:
-	simplenet::SimpleNetMT::Connection& m_connection;
+    boost::asio::ip::tcp::socket& m_socket;
 };
-

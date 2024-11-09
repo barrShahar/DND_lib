@@ -59,18 +59,6 @@
     <ClInclude Include="GameServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Internet\AsyncNetworkHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Internet\BlockingQueueMT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Internet\SimpleNetMT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Internet\UrlPathReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NetWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -24,10 +24,11 @@ public:
 
     static std::unique_ptr<Treasure> TreasureFactory(TREASURE_TYPE type);
 
-    std::string DeclareMessage();
-    std::string HpIncreased(int a_curr_hp, int a_hp);
-    std::string AttackPointsIncreaed(int a_currAttackPoints, int a_attackPoints);
-    std::string Get_Reply();
+    std::string DeclareMessage() const;
+    std::string HpIncreased(int a_curr_hp, int a_hp) const;
+    std::string AttackPointsIncreaed(int a_currAttackPoints, int a_attackPoints) const;
+    std::string Get_Reply() const;
+    std::string GetName() const;
 
 protected:
     std::string m_reply;

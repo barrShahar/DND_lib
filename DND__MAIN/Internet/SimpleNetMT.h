@@ -4,7 +4,7 @@
 #include <memory>
 #include <unordered_map>
 #include <thread>
-#include "Internet/BlockingQueueMT.h"
+#include "BlockingQueueMT.h"
 
 namespace simplenet
 {
