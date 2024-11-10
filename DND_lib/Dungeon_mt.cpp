@@ -163,14 +163,14 @@ const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 */
 
 	Rooms rooms; // return value
-	rooms.emplace_back(NUMBER_ZERO, make_pair(true, Number(1)), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(2)), false, true, nullptr);
-	rooms.emplace_back(Number(1), make_pair(true, Number(3)), make_pair(true, Number(4)), make_pair(true, NUMBER_ZERO), make_pair(false, -1), false, false, nullptr);
-	rooms.emplace_back(Number(2), make_pair(false, -1), make_pair(true, NUMBER_ZERO), make_pair(false, -1), make_pair(false, -1), true, true, std::make_shared<Dragon>());
-	rooms.emplace_back(Number(3), make_pair(true, Number(7)), make_pair(true, Number(5)), make_pair(true, Number(1)), make_pair(false, -1), true, true, std::make_shared<Dragon>());
-	rooms.emplace_back(Number(4), make_pair(true, Number(5)), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(1)), false, true, nullptr);
-	rooms.emplace_back(Number(5), make_pair(true, Number(6)), make_pair(false, -1), make_pair(true, Number(4)), make_pair(true, Number(3)), false, false, nullptr);
-	rooms.emplace_back(Number(6), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(5)), make_pair(true, Number(7)), false, false, nullptr);
-	rooms.emplace_back(Number(8), make_pair(false, -1), make_pair(true, Number(6)), make_pair(true, Number(3)), make_pair(false, -1), true, true, std::make_shared<Dragon>());
+	rooms.emplace_back(NUMBER_ZERO, make_pair(true, Number(1)), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(2)), true, nullptr);
+	rooms.emplace_back(Number(1), make_pair(true, Number(3)), make_pair(true, Number(4)), make_pair(true, NUMBER_ZERO), make_pair(false, -1), false, nullptr);
+	rooms.emplace_back(Number(2), make_pair(false, -1), make_pair(true, NUMBER_ZERO), make_pair(false, -1), make_pair(false, -1), true, std::make_shared<Dragon>());
+	rooms.emplace_back(Number(3), make_pair(true, Number(7)), make_pair(true, Number(5)), make_pair(true, Number(1)), make_pair(false, -1), true, std::make_shared<Dragon>());
+	rooms.emplace_back(Number(4), make_pair(true, Number(5)), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(1)), true, nullptr);
+	rooms.emplace_back(Number(5), make_pair(true, Number(6)), make_pair(false, -1), make_pair(true, Number(4)), make_pair(true, Number(3)), false, nullptr);
+	rooms.emplace_back(Number(6), make_pair(false, -1), make_pair(false, -1), make_pair(true, Number(5)), make_pair(true, Number(7)), false, nullptr);
+	rooms.emplace_back(Number(8), make_pair(false, -1), make_pair(true, Number(6)), make_pair(true, Number(3)), make_pair(false, -1), true, std::make_shared<Dragon>());
 
 	return std::move(rooms);
 

@@ -11,7 +11,7 @@ class SubjectRoom_mt
 public:
     explicit SubjectRoom_mt() = default;
     SubjectRoom_mt(const SubjectRoom_mt& a_other) = delete;
-    SubjectRoom_mt(SubjectRoom_mt&& a_other) = default; // Allow move construction
+    SubjectRoom_mt(SubjectRoom_mt&& a_other) noexcept = default; // Allow move construction
     SubjectRoom_mt& operator=(SubjectRoom_mt&&) noexcept = default;  // Allow move assignment
     SubjectRoom_mt& operator=(const SubjectRoom_mt& a_other) = delete;
     ~SubjectRoom_mt() = default;

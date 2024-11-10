@@ -23,7 +23,6 @@ public:
                   std::pair<bool, Number> a_isDoorEast,
                   std::pair<bool, Number> a_isDoorSouth,
                   std::pair<bool, Number> a_isDoorWest,
-                  bool a_isDragon,
                   bool a_isTreasure,
                   std::shared_ptr<Monster> a_monsterPtr
         );

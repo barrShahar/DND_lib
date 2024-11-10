@@ -9,7 +9,7 @@ Room_mt::Room_mt(Number a_roomNumber,
 		   std::pair<bool, Number> a_isDoorEast,
 		   std::pair<bool, Number> a_isDoorSouth,
 		   std::pair<bool, Number> a_isDoorWest,
-		   bool a_isDragon, bool a_isTreasure,
+		   bool a_isTreasure,
 		   std::shared_ptr<Monster> a_monsterPtr)
 	: // Initializer list
 	m_isTreasure { a_isTreasure },
