@@ -9,8 +9,8 @@ std::unique_ptr<ActionResponse> AttackAction::Act(Dungeon_mt &a_dungeon, Player&
 
 	// lock the entire room
 	// get reference of the person or monster object that being attack
-	Room_mt room = a_dungeon.GetRoom(a_player.GetRoomNumber());
-	std::vector<std::string> players = room.GetNamesVec();
+	//Room_mt room = a_dungeon.GetRoom(a_player.GetRoomNumber());
+	//std::vector<std::string> players = room.GetNamesVec();
 
 
 	// attack and get response from the attacker (or not)

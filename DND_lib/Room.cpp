@@ -1,5 +1,7 @@
 #include "Room.h"
 #include <random>
+#include <cassert>
+
 namespace dnd_game
 {
 Room_mt::Room_mt(Number a_roomNumber,
@@ -10,32 +12,43 @@ Room_mt::Room_mt(Number a_roomNumber,
 		   bool a_isDragon, bool a_isTreasure,
 		   std::shared_ptr<Monster> a_monsterPtr)
 	: // Initializer list
-	m_containsMonster { a_isDragon },
 	m_isTreasure { a_isTreasure },
+	m_subject{},
 	m_roomNumber { a_roomNumber },
-	m_dragon {},
 	m_mutex {},
 	m_walls { Wall(a_isDoorNorth.first, a_isDoorNorth.second),
 	Wall {a_isDoorEast.first, a_isDoorEast.second },
 	Wall {a_isDoorSouth.first, a_isDoorSouth.second },
 	Wall { a_isDoorWest.first, a_isDoorWest.second } },
-	m_monsterPtr { std::move(a_monsterPtr) }
+	m_monsterPtr { a_monsterPtr }
 {
 	// CTOR
+	std::cout << "Debug!! :\n";
+	if (!m_monsterPtr) {
+		std::cout << "m_monsterPtr is nullptr or empty (room " << m_roomNumber << ")" << std::endl;
+	}
+	else {
+		std::cout << "m_monsterPtr is initialized (room " << m_roomNumber << ")" << std::endl;
+	}
 }
 
 Room_mt::Room_mt(const Room_mt& a_other)
-	: m_containsMonster { a_other.m_containsMonster }
-	, m_isTreasure { a_other.m_isTreasure }
+	: m_isTreasure { a_other.m_isTreasure }
 	, m_roomNumber { a_other.m_roomNumber }
 	, m_walls { a_other.m_walls }
+	, m_monsterPtr { a_other.m_monsterPtr }
+	, m_subject{}
 {
 	// COPY-CTOR
 }
 
 std::string Room_mt::GetNames() const
 {
-	return m_containsMonster ? m_subject.GetNames() + "monsters:" + ENDL + m_dragon.GetName() + ENDL : m_subject.GetNames();
+	{	// guard
+		std::unique_lock lock(m_mutex);
+		return m_monsterPtr ? m_subject.GetNames() + "monsters:" + ENDL + m_monsterPtr->GetName() + ENDL : m_subject.GetNames();
+	}
+
 }
 
 std::vector<std::string> Room_mt::GetNamesVec() const
@@ -52,7 +65,7 @@ void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)
 		m_walls.at(1).IsDoor(),
 		m_walls.at(2).IsDoor(),
 		m_walls.at(3).IsDoor(),
-		m_containsMonster,
+		ContainsMonster(),
 		m_isTreasure };
 	dungRoom.Draw(canvas, a_direction, ASCII_AXIS_X, ASCII_AXIS_Y);
 	canvas.Print(a_wrier);
@@ -65,47 +78,28 @@ bool Room_mt::isDoor(Direction a_direction) const
 
 std::optional<Number> Room_mt::GetNextDoorRoomNumber(Direction a_direction) const
 {
-	if (m_containsMonster)
-	{
-		const std::vector<Direction> blockedDirections = m_dragon.BlcokedDirections();
-		for (Direction direction : blockedDirections)
-		{
-			if (direction == a_direction)
-			{
-				return std::nullopt;
+	try {
+		if (m_monsterPtr.get()) {
+			const std::vector<Direction> blockedDirections = m_monsterPtr->BlcokedDirections();
+			for (Direction direction : blockedDirections) {
+				if (direction == a_direction) {
+					return std::nullopt;
+				}
 			}
 		}
+
+		return m_walls.at(static_cast<Number>(a_direction)).GetNextRoomNumber();
+	}
+
+	catch (...) 
+	{
+		assert(m_monsterPtr == nullptr);
 	}
 	
+	// finally
 	return m_walls.at(static_cast< Number >(a_direction)).GetNextRoomNumber();
 }
 
-//AttackPlayerResponse Room_mt::AttackPlayer(const std::string& a_attackedName, Number a_dmg)
-//{
-//	return m_subject.AttackPlayer(a_attackedName, a_dmg);
-//}
-
-//AttackDragonResponse Room_mt::AttackDragon(Number a_dmg)
-//{
-//	std::lock_guard<std::mutex> lock(m_treasureDragonMutex);
-//	if (!m_containsMonster)
-//	{
-//		AttackDragonResponse respone;
-//		respone.m_damageToPlayer = 0;
-//		respone.m_dragonRemainingLife = 0;
-//		return respone;
-//	}
-//
-//	Number returnDmg = m_dragon.DamageAndAttack(a_dmg);
-//	AttackDragonResponse respone;
-//	respone.m_damageToPlayer = returnDmg;
-//	respone.m_dragonRemainingLife = m_dragon.GetLifePoints();
-//	if (!m_dragon.IsAlive())
-//	{
-//		m_containsMonster = false;
-//	}
-//	return respone;
-//}
 
 std::optional<TREASURE_TYPE> Room_mt::GetTreasure_mt()
 {
@@ -116,7 +110,7 @@ std::optional<TREASURE_TYPE> Room_mt::GetTreasure_mt()
 			return std::nullopt;
 		}
 
-		if (m_containsMonster)
+		if (ContainsMonster())
 		{
 			return TREASURE_TYPE::GUARDED;
 		}
@@ -141,8 +135,8 @@ void Room_mt::Register(Player& a_player)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.Register(a_player);
 		m_subject.NotifyAll(a_player.GetName() + " has entered the room");
+		m_subject.Register(a_player);
 	}
 }
 
@@ -178,10 +172,7 @@ Room_mt::Iterator Room_mt::begin()
 
 bool Room_mt::ContainsMonster() const
 {
-	{	// Guard
-		std::shared_lock lock(m_mutex);
-		return m_containsMonster;
-	}
+		return (m_monsterPtr != nullptr);
 }
 
 bool Room_mt::IsTreasure() const

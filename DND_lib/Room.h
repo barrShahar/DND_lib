@@ -29,6 +29,8 @@ public:
         );
 
     Room_mt(const Room_mt& a_other);
+    Room_mt(Room_mt&&) noexcept = default;  // Allow move construction
+    Room_mt& operator=(Room_mt&&) noexcept = default;  // Allow move assignment
     Room_mt& operator=(const Room_mt& a_other) = delete;
     ~Room_mt() = default;
 
@@ -100,9 +102,7 @@ private:
     Walls m_walls;
     Number m_roomNumber;
     SubjectRoom_mt m_subject;
-    bool m_containsMonster;
     bool m_isTreasure;
-    Dragon m_dragon;
     std::shared_ptr<Monster> m_monsterPtr;
 
 
