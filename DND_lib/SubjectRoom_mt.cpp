@@ -4,13 +4,28 @@ namespace dnd_game
 std::string SubjectRoom_mt::GetNames() const
 {
 	std::lock_guard<std::mutex> lock(m_roomMutex);
-	std::string playersNames = "Players Names:\n";
+	std::string playersNames = "";
 	for (const std::pair<std::string const, std::unique_ptr<ObserverPlayer_mt>>& player : m_observersMap)
 	{
 		playersNames.append(player.first);
-		playersNames.append("\n");
+		playersNames.append(ENDL);
 	}
+
 	return playersNames;
+}
+
+std::vector<std::string> SubjectRoom_mt::GetNamesVec() const
+{
+	{	// gaurd
+		std::lock_guard<std::mutex> lock(m_roomMutex);
+		std::vector<std::string> playersNames;
+		for (const std::pair<std::string const, std::unique_ptr<ObserverPlayer_mt>>& player : m_observersMap)
+		{
+			playersNames.push_back(player.first);
+		}
+
+		return playersNames;
+	}
 }
 
 void SubjectRoom_mt::Register(Player& a_player)

@@ -156,6 +156,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="player_mt.h" />
     <ClInclude Include="Reader.h" />
+    <ClInclude Include="RnStringActionResponse.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="StringActionResponse.h" />
     <ClInclude Include="SubjectRoom_mt.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="player_mt.cpp" />
     <ClCompile Include="RightAction.cpp" />
+    <ClCompile Include="RnStringActionResponse.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ShoutAction.cpp" />
     <ClCompile Include="StringActionResponse.cpp" />

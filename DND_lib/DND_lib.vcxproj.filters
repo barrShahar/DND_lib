@@ -117,6 +117,9 @@
     <ClInclude Include="Monster.h">
       <Filter>Header Files\Dungeon\Monsters</Filter>
     </ClInclude>
+    <ClInclude Include="RnStringActionResponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DND_lib.cpp">
@@ -147,9 +150,6 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="GameServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StringActionResponse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LeftAction.cpp">
@@ -211,6 +211,12 @@
     </ClCompile>
     <ClCompile Include="player_mt.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RnStringActionResponse.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="StringActionResponse.cpp">
+      <Filter>Source Files\IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

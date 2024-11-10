@@ -61,7 +61,7 @@ void GameController::Start()
 		currState = m_stateFunctions[static_cast< Number >(currState)]();
 	}
 
-	m_writer << "Exit\n";
+	m_writer << "Exit" + ENDL;
 }
 
 
@@ -136,7 +136,7 @@ STATE GameController::AttackHandler()
 STATE GameController::CleanUp()
 {
 	// Do cleanup if needed
-	m_writer << "Cleaing\n";
+	m_writer << "Cleaing" + ENDL;
 	return STATE::EXIT;
 }
 

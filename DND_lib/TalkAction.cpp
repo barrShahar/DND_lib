@@ -10,7 +10,7 @@ std::unique_ptr<ActionResponse> TalkAction::Act(Dungeon_mt &a_dungeon, Player& a
 	a_dungeon.NotifyRoomExcept(a_player, a_player.GetRoomNumber(), a_player.GetName() + "<talk>: " + message);
 
 	return std::make_unique<StringActionResponse>(
-		"Sent: " + message
+		"Sent<talk>: " + message
 	);
 
 

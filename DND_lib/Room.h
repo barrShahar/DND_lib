@@ -24,13 +24,17 @@ public:
                   std::pair<bool, Number> a_isDoorSouth,
                   std::pair<bool, Number> a_isDoorWest,
                   bool a_isDragon,
-                  bool a_isTreasure);
+                  bool a_isTreasure,
+                  std::shared_ptr<Monster> a_monsterPtr
+        );
 
     Room_mt(const Room_mt& a_other);
     Room_mt& operator=(const Room_mt& a_other) = delete;
     ~Room_mt() = default;
 
     std::string GetNames() const;
+    std::vector<std::string> GetNamesVec() const;
+    std::optional<std::unique_ptr<Monster>> GetMonster();
     void DrawRoom(Writer& a_wrier, Direction a_direction);
     bool isDoor(Direction a_direction) const;
     bool ContainsMonster() const;
@@ -46,6 +50,10 @@ public:
     void Unregister(Player& a_player);
     void NotifyAll(const std::string& a_message);
     void NotifyAllExcept(const Player& a_excludedPlayer, const std::string& a_message);
+
+    // Template method to lock player instance during callable execution
+    template <typename Func>
+    void WithLock(Func func);
 
     class Iterator
     {
@@ -95,7 +103,17 @@ private:
     bool m_containsMonster;
     bool m_isTreasure;
     Dragon m_dragon;
+    std::shared_ptr<Monster> m_monsterPtr;
+
 
     mutable std::shared_mutex m_mutex;  // Mutex for thread safety
 };
+
+// Template function definition
+template <typename Func>
+inline void Room_mt::WithLock(Func func) {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    func();
+}
+
 }  // namespace dnd_game

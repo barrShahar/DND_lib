@@ -1,4 +1,5 @@
 #include "Action.h"
+#include "StringActionResponse.h"
 
 namespace dnd_game
 {
@@ -18,7 +19,9 @@ std::unique_ptr<ActionResponse> ShoutAction::Act(Dungeon_mt &a_dungeon, Player& 
 	}
 
 	
-	return {};
+	return std::make_unique<StringActionResponse>(
+		"Sent<shout>: " + message
+	);
 }
 
 }	// dnd_game

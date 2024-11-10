@@ -141,7 +141,7 @@ std::optional<TREASURE_TYPE> Dungeon_mt::GetTreasure(Number a_roomNumber)
 {
 	return 	m_rooms.at(a_roomNumber).GetTreasure_mt();
 }
-
+#include <Dragon.h>
 const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 {
 	using std::make_pair;
@@ -149,14 +149,14 @@ const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 	Number roomNumber = 0;
 	Rooms rooms // return value
 	{
-		Room_mt { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true },
-		Room_mt { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false },
-		Room_mt { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true },
-		Room_mt { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true },
-		Room_mt { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true },
-		Room_mt { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false },
-		Room_mt { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false },
-		Room_mt { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true },
+		Room_mt { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true, nullptr},
+		Room_mt { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false, nullptr },
+		Room_mt { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true, std::make_shared<Dragon>(Dragon{})},
+		Room_mt { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true, std::make_shared<Dragon>(Dragon{}) },
+		Room_mt { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true, nullptr },
+		Room_mt { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false, nullptr },
+		Room_mt { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false, nullptr },
+		Room_mt { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true, std::make_shared<Dragon>(Dragon{}) },
 	};
 	return rooms;
 	/*

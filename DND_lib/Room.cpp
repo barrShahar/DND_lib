@@ -7,7 +7,8 @@ Room_mt::Room_mt(Number a_roomNumber,
 		   std::pair<bool, Number> a_isDoorEast,
 		   std::pair<bool, Number> a_isDoorSouth,
 		   std::pair<bool, Number> a_isDoorWest,
-		   bool a_isDragon, bool a_isTreasure)
+		   bool a_isDragon, bool a_isTreasure,
+		   std::shared_ptr<Monster> a_monsterPtr)
 	: // Initializer list
 	m_containsMonster { a_isDragon },
 	m_isTreasure { a_isTreasure },
@@ -17,7 +18,8 @@ Room_mt::Room_mt(Number a_roomNumber,
 	m_walls { Wall(a_isDoorNorth.first, a_isDoorNorth.second),
 	Wall {a_isDoorEast.first, a_isDoorEast.second },
 	Wall {a_isDoorSouth.first, a_isDoorSouth.second },
-	Wall { a_isDoorWest.first, a_isDoorWest.second } }
+	Wall { a_isDoorWest.first, a_isDoorWest.second } },
+	m_monsterPtr { std::move(a_monsterPtr) }
 {
 	// CTOR
 }
@@ -33,8 +35,15 @@ Room_mt::Room_mt(const Room_mt& a_other)
 
 std::string Room_mt::GetNames() const
 {
-	return m_subject.GetNames();
+	return m_containsMonster ? m_subject.GetNames() + "monsters:" + ENDL + m_dragon.GetName() + ENDL : m_subject.GetNames();
 }
+
+std::vector<std::string> Room_mt::GetNamesVec() const
+{
+	return m_subject.GetNamesVec();
+}
+
+
 
 void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)
 {

@@ -1,6 +1,10 @@
 #pragma once
+#include <string>  
+
 namespace dnd_game
 {
+static const std::string ENDL = "\r\n"; // for boost.asio protocol
+
 using Number = unsigned int;
 
 static constexpr int THERE_IS_A_DRAGON = -1;

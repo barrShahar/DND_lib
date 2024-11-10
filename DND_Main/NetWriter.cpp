@@ -9,10 +9,24 @@ NetWriter::NetWriter(boost::asio::ip::tcp::socket& a_socket)
     // Ctor
 }
 
+std::string ConvertNewlines(const std::string& input) {
+    std::string result;
+    for (char c : input) {
+        if (c == '\n') {
+            result += "\r\n";
+        }
+        else {
+            result += c;
+        }
+    }
+    return result;
+}
+
 void NetWriter::Write(const std::string& a_str)
 {
     try
     {
+
         boost::asio::write(m_socket, boost::asio::buffer(a_str));
     }
     catch (const boost::system::system_error& e)

@@ -15,6 +15,7 @@ public:
     ~SubjectRoom_mt() = default;
 
     std::string GetNames() const;
+    std::vector<std::string> GetNamesVec() const;
 
     virtual void Register(Player& a_player);
     virtual void Unregister(Player& a_player);
