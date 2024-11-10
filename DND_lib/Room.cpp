@@ -13,7 +13,7 @@ Room_mt::Room_mt(Number a_roomNumber,
 		   std::shared_ptr<Monster> a_monsterPtr)
 	: // Initializer list
 	m_isTreasure { a_isTreasure },
-	m_subject{},
+	m_subject { std::make_shared<SubjectRoom_mt>()},
 	m_roomNumber { a_roomNumber },
 	m_mutex {},
 	m_walls { Wall(a_isDoorNorth.first, a_isDoorNorth.second),
@@ -23,43 +23,56 @@ Room_mt::Room_mt(Number a_roomNumber,
 	m_monsterPtr { a_monsterPtr }
 {
 	// CTOR
-	std::cout << "Debug!! :\n";
-	if (!m_monsterPtr) {
-		std::cout << "m_monsterPtr is nullptr or empty (room " << m_roomNumber << ")" << std::endl;
-	}
-	else {
-		std::cout << "m_monsterPtr is initialized (room " << m_roomNumber << ")" << std::endl;
-	}
 }
 
-Room_mt::Room_mt(const Room_mt& a_other)
-	: m_isTreasure { a_other.m_isTreasure }
-	, m_roomNumber { a_other.m_roomNumber }
-	, m_walls { a_other.m_walls }
-	, m_monsterPtr { a_other.m_monsterPtr }
-	, m_subject{}
+//Room_mt::Room_mt(const Room_mt& a_other)
+//	: m_isTreasure { a_other.m_isTreasure }
+//	, m_roomNumber { a_other.m_roomNumber }
+//	, m_walls { a_other.m_walls }
+//	, m_monsterPtr { a_other.m_monsterPtr }
+//	, m_subject{ a_other.m_subject }
+//{
+//	// COPY-CTOR
+//	std::cout << "debug: Room_my COPY-CTOR\n";
+//}
+
+// Move constructor
+Room_mt::Room_mt(Room_mt&& a_other) noexcept
+	: m_isTreasure{ a_other.m_isTreasure },
+	m_roomNumber{ a_other.m_roomNumber },
+	m_walls{ std::move(a_other.m_walls) },
+	m_monsterPtr{ std::move(a_other.m_monsterPtr) },
+	m_subject{ std::move(a_other.m_subject) }
 {
-	// COPY-CTOR
+	// MOVE-CTOR
+	std::cout << "debug: Room_mt MOVE-CTOR\n";
+
+	// Reset moved-from object's optional members
+	a_other.m_isTreasure = false;
+	a_other.m_monsterPtr = nullptr;
+	a_other.m_subject = nullptr;
 }
 
 std::string Room_mt::GetNames() const
 {
 	{	// guard
 		std::unique_lock lock(m_mutex);
-		return m_monsterPtr ? m_subject.GetNames() + "monsters:" + ENDL + m_monsterPtr->GetName() + ENDL : m_subject.GetNames();
+		return m_monsterPtr ? m_subject.get()->GetNames() + "monsters:" + ENDL + m_monsterPtr->GetName() + ENDL 
+			: m_subject.get()->GetNames();
 	}
 
 }
 
 std::vector<std::string> Room_mt::GetNamesVec() const
 {
-	return m_subject.GetNamesVec();
+	return m_subject.get()->GetNamesVec();
 }
 
 
 
 void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)
 {
+	std::cout << "m_subject Reference count: " << m_subject.use_count() << std::endl;
 	Grid canvas { ASCII_AXIS_X, ASCII_AXIS_Y };
 	DungeonAscii dungRoom { m_walls.at(0).IsDoor(),
 		m_walls.at(1).IsDoor(),
@@ -135,8 +148,8 @@ void Room_mt::Register(Player& a_player)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.NotifyAll(a_player.GetName() + " has entered the room");
-		m_subject.Register(a_player);
+		m_subject.get()->NotifyAll(a_player.GetName() + " has entered the room");
+		m_subject.get()->Register(a_player);
 	}
 }
 
@@ -144,8 +157,8 @@ void Room_mt::Unregister(Player& a_player)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.NotifyAll(a_player.GetName() + " has left the room");
-		m_subject.Unregister(a_player);
+		m_subject.get()->NotifyAll(a_player.GetName() + " has left the room");
+		m_subject.get()->Unregister(a_player);
 	}
 }
 
@@ -153,7 +166,7 @@ void Room_mt::NotifyAll(const std::string& a_message)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.NotifyAll(a_message);
+		m_subject.get()->NotifyAll(a_message);
 	}
 }
 
@@ -161,7 +174,7 @@ void Room_mt::NotifyAllExcept(const Player& a_excludedPlayer, const std::string&
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.NotifyAllExcept(a_excludedPlayer, a_message);
+		m_subject.get()->NotifyAllExcept(a_excludedPlayer, a_message);
 	}
 }
 

@@ -9,7 +9,7 @@ std::unique_ptr<ActionResponse> ShoutAction::Act(Dungeon_mt &a_dungeon, Player& 
 
 	a_dungeon.NotifyRoomExcept(a_player, a_player.GetRoomNumber(), a_player.GetName() + "<shout>: " + message);
 
-	const Room_mt room = a_dungeon.GetRoom(a_player.GetRoomNumber());
+	const Room_mt& room = a_dungeon.GetRoom(a_player.GetRoomNumber());
 	for (const Wall& wall : room)
 	{
 		if (wall.IsDoor())
