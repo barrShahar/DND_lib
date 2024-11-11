@@ -21,7 +21,7 @@ telnet < server-ip > 4010
 Replace <server-ip> with the IP address of the server hosting the game. Once connected, players can interact with the dungeon environment and other players in real-time.
 
 
-Project Structor: 
+Project Structure: 
 ```sh
 ├── DND_main (Using boost)
 │   ├── header
