@@ -14,9 +14,11 @@ A C++ project that implements a Dungeon & Dragons-inspired multiplayer game serv
 
 ## Connecting to the Server
 
-Players can connect using Telnet or a similar tool:
+Players can connect to the game server using Telnet or any terminal-based network communication tool. Simply run the following command to initiate a connection:
 
-telnet <server-ip> 4010
+telnet < server-ip > 4010
+
+Replace <server-ip> with the IP address of the server hosting the game. Once connected, players can interact with the dungeon environment and other players in real-time.
 
 
 Project Structor: 
