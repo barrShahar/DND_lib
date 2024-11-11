@@ -15,12 +15,12 @@ A C++ project that implements a Dungeon & Dragons-inspired multiplayer game serv
 ## Connecting to the Server
 
 Players can connect using Telnet or a similar tool:
-```sh
+
 telnet <server-ip> 4010
 
 
 Project Structor: 
-
+```sh
 ├── DND_main (Using boost)
 │   ├── header
 │   │   ├── NetReader.h      # Header file defining the NetReader class, responsible for reading input from network connections.
