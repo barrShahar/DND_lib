@@ -13,9 +13,12 @@ public:
     ~StringActionResponse() = default;
 
     virtual ReplyType GetResponse() override;
+    friend StringActionResponse operator+(const StringActionResponse& lhs, const StringActionResponse& rhs);
 
 private:
     Data m_reply;
     size_t m_dataSize;
 };
+
+
 }	// dnd_game

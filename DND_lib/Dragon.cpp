@@ -15,9 +15,11 @@ std::vector<Direction> Dragon::BlcokedDirections() const
 	return { Direction::NORTH };
 }
 
-std::string Dragon::GetName() const
+const std::string& Dragon::GetName() const
 {
 	return m_name;
 }
+
+
 
 }	// namespace dnd_game

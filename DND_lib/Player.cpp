@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <cassert>
 
 namespace dnd_game
 {
@@ -58,6 +59,7 @@ const std::string Player::GetArguments() const
 
 const bool Player::IsAlive() const
 {
+	assert(m_hp >= 0, "Players hp became negative!");
 	return (m_hp > 0);
 }
 
@@ -85,6 +87,16 @@ void Player::SetDmgPoints(const Number a_dmgP)
 void Player::SetArguments(std::string a_commandArguemnts)
 {
 	m_commandArguemnts = a_commandArguemnts;
+}
+
+void Player::TakeDamage(Number a_damage)
+{
+	SetHealthPoints(std::max(0, GetHealthPoints()));
+}
+
+bool Player::IsInPlay() const
+{
+	return IsAlive();
 }
 
 }	// dnd_game

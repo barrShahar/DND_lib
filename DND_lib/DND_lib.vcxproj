@@ -146,6 +146,8 @@
     <ClInclude Include="ActionResponse.h" />
     <ClInclude Include="ascii\DungeonAscii.h" />
     <ClInclude Include="ascii\Grid.h" />
+    <ClInclude Include="AttackService.h" />
+    <ClInclude Include="IAttackable.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon_mt.h" />
@@ -154,7 +156,6 @@
     <ClInclude Include="GameParams.h" />
     <ClInclude Include="ObserverPlayer_mt.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="player_mt.h" />
     <ClInclude Include="Reader.h" />
     <ClInclude Include="RnStringActionResponse.h" />
     <ClInclude Include="Room.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="ascii\DungeonAscii.cpp" />
     <ClCompile Include="ascii\Grid.cpp" />
     <ClCompile Include="AttackAction.cpp" />
+    <ClCompile Include="AttackService.cpp" />
     <ClCompile Include="DungeonMonster.cpp" />
     <ClCompile Include="DND_lib.cpp" />
     <ClCompile Include="Dragon.cpp" />
@@ -180,11 +182,11 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameParams.cpp" />
+    <ClCompile Include="IAttackable.cpp" />
     <ClCompile Include="LeftAction.cpp" />
     <ClCompile Include="LookAction.cpp" />
     <ClCompile Include="ObserverPlayer_mt.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="player_mt.cpp" />
     <ClCompile Include="RightAction.cpp" />
     <ClCompile Include="RnStringActionResponse.cpp" />
     <ClCompile Include="Room.cpp" />

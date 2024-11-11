@@ -1,4 +1,5 @@
 #include "StringActionResponse.h"
+#include "GameParams.h"
 
 namespace dnd_game
 {
@@ -15,6 +16,16 @@ StringActionResponse::StringActionResponse(const std::string& a_reply)
 ReplyType StringActionResponse::GetResponse()
 {
 	return std::move(std::make_pair(std::move(m_reply), m_dataSize));
+}
+
+
+StringActionResponse operator+(const StringActionResponse& lhs, const StringActionResponse& rhs)
+{
+    // Get the response strings
+    std::string lString = lhs.m_reply.get();
+    std::string rString = rhs.m_reply.get();
+    
+    return StringActionResponse(lString + ENDL + rString);
 }
 
 }  // dnd_game

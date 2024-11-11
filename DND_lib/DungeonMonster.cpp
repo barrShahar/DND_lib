@@ -31,4 +31,14 @@ void Monster::SetHP(Number a_hp)
 	m_healthPoints = a_hp;
 }
 
+void Monster::TakeDamage(Number damage)
+{
+	SetHP(std::max(0, damage));
+}
+
+bool Monster::IsInPlay() const
+{
+	return GetHP() > 0;
+}
+
 }

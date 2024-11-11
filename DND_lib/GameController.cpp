@@ -77,6 +77,11 @@ STATE GameController::DrawRoom()
 STATE GameController::WaitingForInput()
 {
 	const std::string untrustedUserCommand = m_reader.ReadLine();
+	if (!m_player.IsInPlay())
+	{
+		return STATE::EXIT;
+	}
+
 	ParsedCommand parsedCommand = m_userCommandParser.ParseCommand(untrustedUserCommand);
 	m_currentCommand = parsedCommand.GetCommand();
 	m_player.SetArguments(parsedCommand.GetArguments());

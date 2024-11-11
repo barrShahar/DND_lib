@@ -3,13 +3,15 @@
 #include <mutex>
 #include "GameParams.h"
 #include "Writer.h"
+#include "IAttackable.h"
 
 namespace dnd_game {
 
 static constexpr Number INITIAL_HEALTH_POINTS = 100;
 static constexpr Number INITIAL_ATTACK_POINTS = 20;
 
-class Player {
+class Player : public IAttackable
+{
 public:
     explicit Player(const std::string& a_name, const Number a_entryRoom, Writer& a_writer);
     Player(const Player& a_other) = delete;
@@ -37,6 +39,10 @@ public:
     void SetHealthPoints(Number a_hp);
     void SetDmgPoints(Number a_dmgP);
     void SetArguments(std::string a_arguemnts);
+
+    // Attackable Interface
+    virtual void TakeDamage(Number damage);
+    virtual bool IsInPlay() const;
 
 private:
     const std::string m_name;

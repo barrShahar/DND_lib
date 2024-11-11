@@ -2,10 +2,11 @@
 #include <vector>
 #include <string>
 #include "GameParams.h"
+#include "IAttackable.h"
 
 namespace dnd_game
 {
-class Monster
+class Monster : public IAttackable 
 {
 public:
     explicit Monster(Number a_maxHealth, Number a_attackDmg);
@@ -18,10 +19,14 @@ public:
     Number DamageAndAttack(Number a_hitPoints);
     bool IsAlive() const;
     virtual std::vector<Direction> BlcokedDirections() const = 0;
-    virtual std::string GetName() const = 0;    
+    virtual const std::string& GetName() const = 0;
 
     Number GetHP() const;
     void SetHP(Number a_hp);
+
+    virtual void TakeDamage(Number damage);
+    virtual bool IsInPlay() const;
+
 private:
     Number m_healthPoints;
     Number m_attackDmg;

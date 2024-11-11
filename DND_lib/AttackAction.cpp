@@ -1,6 +1,7 @@
 #include "Action.h"
 #include "SubjectRoom_mt.h"
 #include "StringActionResponse.h"
+#include "AttackService.h"
 
 namespace dnd_game {
 
@@ -87,6 +88,7 @@ namespace dnd_game {
                                     a_subject.get()->Unregister(other);
                                     a_subject.get()->NotifyAllExcept(a_player, a_player.GetName() + " killed " + other.GetName() + "!!");
                                     actionResponseMessage = "You've killed " + other.GetName() + "!";
+                                    other.NotifyPlayer(ENDL + ENDL + ENDL + "****** Your'e Dead!! ******" + ENDL + "****** End Of Game ******");
                                 }
                             }
                         }

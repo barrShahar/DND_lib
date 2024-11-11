@@ -17,7 +17,11 @@ public:
     ~Dragon() = default;
 
     virtual std::vector<Direction> BlcokedDirections() const;
-    virtual std::string GetName() const;
+
+    // Iattackable Interface
+    virtual const std::string& GetName() const;
+
+
 
 private:
      std::string m_name;
