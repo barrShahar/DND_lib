@@ -54,8 +54,7 @@ Project Structure:
 │   │   │   │   ├── Monster.h         # Base class for monsters
 │   │   │   │   ├── Dragon.h          # Dragon derived class
 │   │   │   ├── Treasures
-│   │   │   │   ├── Treasure.h        # Contains base and derived classes for treasures
-│   │   │   │   ├── TreasureBase.h    # Base treasure class, possibly abstract
+│   │   │   │   ├── Treasure.h        # Contains base and derived classes for treasures in one file
 │   │   └── IO
 │   │   │   ├── Reader.h              # Abstract base class for reading
 │   │   │   ├── Writer.h              # Abstract base class for writing
