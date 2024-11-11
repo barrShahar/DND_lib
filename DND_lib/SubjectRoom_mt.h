@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <memory>
 #include "ObserverPlayer_mt.h"
+#include "optional"
 
 namespace dnd_game
 {
@@ -18,10 +19,12 @@ public:
 
     std::string GetNames() const;
     std::vector<std::string> GetNamesVec() const;
+    std::optional<std::reference_wrapper<Player>> GetPlayer(const std::string& a_player);
 
     virtual void Register(Player& a_player);
     virtual void Unregister(Player& a_player);
     virtual void NotifyAllExcept(const Player& a_player, const std::string& a_message);
+    virtual void NotifyAllExcept(const std::vector<std::reference_wrapper<Player>>& a_excludedPlayers, const std::string& a_message);
     virtual void NotifyAll(const std::string& a_message);
     //AttackPlayerResponse AttackPlayer(const std::string& a_playerToAttack, Number a_dmg);
 private:

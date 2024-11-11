@@ -17,11 +17,13 @@ ParsedCommand UserCommandParser::ParseCommand(const std::string& a_untrusted) co
 	std::istringstream stream(a_untrusted);
 	std::string commandString;
 	stream >> commandString;  // Extract the command
+	stream >> std::ws; 	// Skip any remaining whitespace
 
 	decltype(m_stringToCommands)::const_iterator it = m_stringToCommands.find(commandString); 
 
+	
 	std::string message;
-	std::getline(stream, message);  // Capture the remaining input as the message
+	std::getline(stream, message);  // Capture the remaining input as the message and flush t
 
 	if (it != m_stringToCommands.end())
 	{

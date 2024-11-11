@@ -56,6 +56,11 @@ const std::string Player::GetArguments() const
 	return m_commandArguemnts;
 }
 
+const bool Player::IsAlive() const
+{
+	return (m_hp > 0);
+}
+
 // Setters
 void Player::SetDirection(Direction a_direction)
 {

@@ -5,7 +5,8 @@ namespace dnd_game
 {
 static const std::string ENDL = "\r\n"; // for boost.asio protocol
 
-using Number = unsigned int;
+using Number = int;
+using posNumber = unsigned int;
 
 static constexpr int THERE_IS_A_DRAGON = -1;
 static constexpr Number NUMBER_OF_DOORS_PER_ROOM = 4;

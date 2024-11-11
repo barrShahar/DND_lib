@@ -46,7 +46,7 @@ GameController::GameController(Writer & a_writer,
 	m_commandStateMap[COMMAND::look] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::take] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::help] = STATE::HELP;
-	m_commandStateMap[COMMAND::attack] = STATE::ATTACK;
+	m_commandStateMap[COMMAND::attack] = STATE::EXECUTE_ACTION;
 	m_commandStateMap[COMMAND::quit] = STATE::CLEANUP;
 }
 

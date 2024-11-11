@@ -35,7 +35,7 @@ public:
 
     std::string GetNames() const;
     std::vector<std::string> GetNamesVec() const;
-    std::optional<std::unique_ptr<Monster>> GetMonster();
+    std::optional<std::shared_ptr<Monster>> GetMonster();
     void DrawRoom(Writer& a_wrier, Direction a_direction);
     bool isDoor(Direction a_direction) const;
     bool ContainsMonster() const;
@@ -112,8 +112,8 @@ private:
 // Template function definition
 template <typename Func>
 inline void Room_mt::WithLock(Func func) {
-    std::lock_guard<std::mutex> lock(m_mutex);
-    func();
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
+    func(m_monsterPtr, m_subject);
 }
 
 }  // namespace dnd_game

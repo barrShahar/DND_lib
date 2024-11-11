@@ -51,8 +51,8 @@ namespace dnd_game {
                     {
                         // Monster defeated
                         a_monsterPtr.reset();  // Reset the shared pointer, monster is defeated
-                        a_subject->NotifyAllExcept(a_player, a_player.GetName() + " has defeated the " + nameToAttack + "!");
-                        actionResponseMessage = "You have defeated the " + nameToAttack + "!";
+                        a_subject->NotifyAllExcept(a_player, a_player.GetName() + " has defeated " + nameToAttack + "!");
+                        actionResponseMessage = "You have defeated " + nameToAttack + "!";
                     }
                     else
                     {
@@ -81,11 +81,11 @@ namespace dnd_game {
                             {
                                 const std::string notifyRoom = a_player.GetName() + " attacked " + other.GetName();
                                 a_subject.get()->NotifyAllExcept({ a_player, other }, notifyRoom);
-                                actionResponseMessage = "You dealth " + std::to_string(a_player.GetDmgPoints()) + " damage points to " + nameToAttack + "! ";
+                                actionResponseMessage = "You dealth " + std::to_string(a_player.GetDmgPoints()) + " damage points to" + nameToAttack + "! ";
                                 if (!other.IsAlive())
                                 {
                                     a_subject.get()->Unregister(other);
-                                    a_subject.get()->NotifyAllExcept(a_player, a_player.GetName() + " killed " + other.GetName() + "!!");
+                                    a_subject.get()->NotifyAllExcept(a_player, other.GetName() + " Has died!");
                                     actionResponseMessage = "You've killed " + other.GetName() + "!";
                                 }
                             }

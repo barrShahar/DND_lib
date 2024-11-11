@@ -42,10 +42,31 @@ public:
 
     AttackDragonResponse AttackDragon(Number a_roomNumber, Number a_dmg);
     std::optional<TREASURE_TYPE> GetTreasure(Number a_roomNumber);
+
+    template <typename Func>
+    void ExecuteWithRoomLock(Number a_roomNumber, Func func);
+
 private:
     const Rooms CreateDungeon() const;
     mutable std::mutex m_mtx;
     std::condition_variable m_dungeonGuard;
     Rooms m_rooms;
 };
+
+template <typename Func>
+void Dungeon_mt::ExecuteWithRoomLock(Number a_roomNumber, Func func)
+{
+    // Ensure room number is valid
+    if (a_roomNumber < 0 || a_roomNumber >= static_cast<Number>(m_rooms.size()))
+    {
+        throw std::out_of_range("Invalid room number");
+    }
+
+    // Get the specified room
+    Room_mt& room = m_rooms[a_roomNumber];
+
+    // Execute the function with room lock
+    room.WithLock(func);
+}
+
 }  // dnd_game

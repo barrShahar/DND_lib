@@ -3,7 +3,7 @@
 namespace dnd_game
 {
 Monster::Monster(Number a_maxHealth, Number a_ttackDmg)
-	: m_lifePoints { a_maxHealth }
+	: m_healthPoints { a_maxHealth }
 	, m_attackDmg { a_ttackDmg }
 {
 	// Ctor
@@ -12,18 +12,23 @@ Monster::Monster(Number a_maxHealth, Number a_ttackDmg)
 Number Monster::DamageAndAttack(Number a_hitPoints)
 {
 
-	m_lifePoints = (m_lifePoints < a_hitPoints) ? 0 : m_lifePoints - a_hitPoints;
-	return (m_lifePoints == 0) ? 0 : m_attackDmg; // If dragon is dead he cannot attack back
+	m_healthPoints = (m_healthPoints < a_hitPoints) ? 0 : m_healthPoints - a_hitPoints;
+	return (m_healthPoints == 0) ? 0 : m_attackDmg; // If dragon is dead he cannot attack back
 }
 
 bool Monster::IsAlive() const
 {
-	return m_lifePoints > 0;
+	return m_healthPoints > 0;
 }
 
-Number Monster::GetLifePoints() const
+Number Monster::GetHP() const
 {
-	return m_lifePoints;
+	return m_healthPoints;
+}
+
+void Monster::SetHP(Number a_hp)
+{
+	m_healthPoints = a_hp;
 }
 
 }

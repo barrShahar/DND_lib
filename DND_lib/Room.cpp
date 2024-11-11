@@ -68,6 +68,11 @@ std::vector<std::string> Room_mt::GetNamesVec() const
 	return m_subject.get()->GetNamesVec();
 }
 
+std::optional<std::shared_ptr<Monster>> Room_mt::GetMonster()
+{
+	return m_monsterPtr;
+}
+
 
 
 void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)

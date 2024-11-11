@@ -5,7 +5,7 @@ namespace dnd_game
 {
 Dragon::Dragon()
 	: Monster(Number(DRAGON_INIT_LIFE_POINTS), Number(DRAGON_MAX_DAMAGE))
-	, m_name { "Dragon "}
+	, m_name { "Dragon"}
 {
 	// Ctor
 }

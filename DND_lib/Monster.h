@@ -20,9 +20,10 @@ public:
     virtual std::vector<Direction> BlcokedDirections() const = 0;
     virtual std::string GetName() const = 0;    
 
-    Number GetLifePoints() const;
+    Number GetHP() const;
+    void SetHP(Number a_hp);
 private:
-    Number m_lifePoints;
+    Number m_healthPoints;
     Number m_attackDmg;
 };
 }  // namespace dnd_game
