@@ -4,7 +4,7 @@
 
 namespace dnd_game
 {
-Room_mt::Room_mt(Number a_roomNumber,
+Room::Room(Number a_roomNumber,
 		   std::pair<bool, Number> a_isDoorNorth,
 		   std::pair<bool, Number> a_isDoorEast,
 		   std::pair<bool, Number> a_isDoorSouth,
@@ -25,7 +25,7 @@ Room_mt::Room_mt(Number a_roomNumber,
 	// CTOR
 }
 
-//Room_mt::Room_mt(const Room_mt& a_other)
+//Room::Room(const Room& a_other)
 //	: m_isTreasure { a_other.m_isTreasure }
 //	, m_roomNumber { a_other.m_roomNumber }
 //	, m_walls { a_other.m_walls }
@@ -37,7 +37,7 @@ Room_mt::Room_mt(Number a_roomNumber,
 //}
 
 // Move constructor
-Room_mt::Room_mt(Room_mt&& a_other) noexcept
+Room::Room(Room&& a_other) noexcept
 	: m_isTreasure{ a_other.m_isTreasure },
 	m_roomNumber{ a_other.m_roomNumber },
 	m_walls{ std::move(a_other.m_walls) },
@@ -53,29 +53,29 @@ Room_mt::Room_mt(Room_mt&& a_other) noexcept
 	a_other.m_subject = nullptr;
 }
 
-std::string Room_mt::GetNames() const
+std::string Room::GetNames_mt() const
 {
 	{	// guard
 		std::unique_lock lock(m_mutex);
-		return m_monsterPtr ? m_subject.get()->GetNames() + "monsters:" + ENDL + m_monsterPtr->GetName() + ENDL 
-			: m_subject.get()->GetNames();
+		return m_monsterPtr ? m_subject.get()->GetNames_mt() + "monsters:" + ENDL + m_monsterPtr->GetName() + ENDL 
+			: m_subject.get()->GetNames_mt();
 	}
 
 }
 
-std::vector<std::string> Room_mt::GetNamesVec() const
+std::vector<std::string> Room::GetNamesVec() const
 {
 	return m_subject.get()->GetNamesVec();
 }
 
-std::optional<std::shared_ptr<Monster>> Room_mt::GetMonster()
+std::optional<std::shared_ptr<Monster>> Room::GetMonster()
 {
 	return m_monsterPtr;
 }
 
 
 
-void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)
+void Room::DrawRoom(Writer& a_wrier, Direction a_direction)
 {
 	std::cout << "m_subject Reference count: " << m_subject.use_count() << std::endl;
 	Grid canvas { ASCII_AXIS_X, ASCII_AXIS_Y };
@@ -89,12 +89,12 @@ void Room_mt::DrawRoom(Writer& a_wrier, Direction a_direction)
 	canvas.Print(a_wrier);
 }
 
-bool Room_mt::isDoor(Direction a_direction) const
+bool Room::isDoor(Direction a_direction) const
 {
 	return m_walls.at(static_cast< Number >(a_direction)).IsDoor();
 }
 
-std::optional<Number> Room_mt::GetNextDoorRoomNumber(Direction a_direction) const
+std::optional<Number> Room::GetNextDoorRoomNumber(Direction a_direction) const
 {
 	try {
 		if (m_monsterPtr.get()) {
@@ -119,7 +119,7 @@ std::optional<Number> Room_mt::GetNextDoorRoomNumber(Direction a_direction) cons
 }
 
 
-std::optional<TREASURE_TYPE> Room_mt::GetTreasure_mt()
+std::optional<TREASURE_TYPE> Room::GetTreasure_mt()
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
@@ -149,51 +149,73 @@ std::optional<TREASURE_TYPE> Room_mt::GetTreasure_mt()
 	
 }
 
-void Room_mt::Register(Player& a_player)
+void Room::Register_mt(Player& a_player)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.get()->NotifyAll(a_player.GetName() + " has entered the room");
-		m_subject.get()->Register(a_player);
+		Register_NoLock(a_player);
 	}
 }
 
-void Room_mt::Unregister(Player& a_player)
+void Room::Register_NoLock(Player& a_player)
+{
+	m_subject.get()->NotifyAll_mt(a_player.GetName() + " has entered the room");
+	m_subject.get()->Register_mt(a_player);
+}
+
+
+void Room::Unregister_mt(Player& a_player)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.get()->NotifyAll(a_player.GetName() + " has left the room");
-		m_subject.get()->Unregister(a_player);
+		Unregister_NoLock(a_player);
 	}
 }
 
-void Room_mt::NotifyAll(const std::string& a_message)
+void Room::Unregister_NoLock(Player& a_player)
+{
+	m_subject.get()->NotifyAll_mt(a_player.GetName() + " has left the room");
+	m_subject.get()->Unregister_mt(a_player);
+}
+
+void Room::NotifyAll_mt(const std::string& a_message)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.get()->NotifyAll(a_message);
+		NotifyAll_NoLock(a_message);
 	}
 }
 
-void Room_mt::NotifyAllExcept(const Player& a_excludedPlayer, const std::string& a_message)
+void Room::NotifyAll_NoLock(const std::string& a_message)
+{
+	m_subject.get()->NotifyAll_mt(a_message);
+}
+
+void Room::NotifyAllExcept_mt(const Player& a_excludedPlayer, const std::string& a_message)
 {
 	{	// guard 
 		std::unique_lock lock(m_mutex);
-		m_subject.get()->NotifyAllExcept(a_excludedPlayer, a_message);
+		NotifyAllExcept_NoLock(a_excludedPlayer, a_message);
 	}
 }
 
-Room_mt::Iterator Room_mt::begin()
+void Room::NotifyAllExcept_NoLock(const Player& a_excludedPlayer, const std::string& a_message)
 {
-	return Room_mt::Iterator(m_walls.begin());
+	m_subject.get()->NotifyAllExcept_mt(a_excludedPlayer, a_message);
 }
 
-bool Room_mt::ContainsMonster() const
+
+Room::Iterator Room::begin()
+{
+	return Room::Iterator(m_walls.begin());
+}
+
+bool Room::ContainsMonster() const
 {
 		return (m_monsterPtr != nullptr);
 }
 
-bool Room_mt::IsTreasure() const
+bool Room::IsTreasure_mt() const
 {
 	{	// Guard 
 		std::shared_lock lock(m_mutex);
@@ -201,39 +223,39 @@ bool Room_mt::IsTreasure() const
 	}
 }
 
-Room_mt::Iterator Room_mt::end()
+Room::Iterator Room::end()
 {
-	return Room_mt::Iterator(m_walls.end());
+	return Room::Iterator(m_walls.end());
 }
 
-Room_mt::ConstIterator Room_mt::cbegin() const
+Room::ConstIterator Room::cbegin() const
 {
 	// CTOR
-	return Room_mt::ConstIterator(m_walls.cbegin());
+	return Room::ConstIterator(m_walls.cbegin());
 }
 
-Room_mt::ConstIterator Room_mt::cend() const
+Room::ConstIterator Room::cend() const
 {
-	return Room_mt::ConstIterator(m_walls.cend());
+	return Room::ConstIterator(m_walls.cend());
 }
 
-Room_mt::ConstIterator Room_mt::begin() const
+Room::ConstIterator Room::begin() const
 {
 	return cbegin();
 }
 
-Room_mt::ConstIterator Room_mt::end() const
+Room::ConstIterator Room::end() const
 {
 	return cend();
 }
 
-Room_mt::Iterator::Iterator(const Walls::iterator& a_it)
+Room::Iterator::Iterator(const Walls::iterator& a_it)
 	: m_it { a_it }
 {
 	// Iterator Ctor
 }
 
-Room_mt::Iterator::Iterator(const Iterator & a_other)
+Room::Iterator::Iterator(const Iterator & a_other)
 	: m_it { a_other.m_it }
 {
 	// Iterator copy ctor
@@ -241,47 +263,47 @@ Room_mt::Iterator::Iterator(const Iterator & a_other)
 
 
 
-bool Room_mt::Iterator::operator!=(const Iterator& a_other)
+bool Room::Iterator::operator!=(const Iterator& a_other)
 {
 	return m_it != a_other.m_it;
 }
 
-Room_mt::Iterator& Room_mt::Iterator::operator++()
+Room::Iterator& Room::Iterator::operator++()
 {
 	++m_it;
 	return *this;
 }
 
-Wall& Room_mt::Iterator::operator*()
+Wall& Room::Iterator::operator*()
 {
 	return *m_it;
 }
 
-Room_mt::ConstIterator::ConstIterator(Walls::const_iterator a_it)
+Room::ConstIterator::ConstIterator(Walls::const_iterator a_it)
 	: m_it { a_it }
 {
 	// CTOR
 }
 
-Room_mt::ConstIterator::ConstIterator(const ConstIterator& a_other)
+Room::ConstIterator::ConstIterator(const ConstIterator& a_other)
 	: m_it{ a_other.m_it }
 {
 	// CPY-CTOR
 
 }
 
-bool Room_mt::ConstIterator::operator!=(const ConstIterator& a_other)
+bool Room::ConstIterator::operator!=(const ConstIterator& a_other)
 {
 	return m_it != a_other.m_it;
 }
 
-Room_mt::ConstIterator& Room_mt::ConstIterator::operator++()
+Room::ConstIterator& Room::ConstIterator::operator++()
 {
 	++m_it;
 	return *this;
 }
 
-const Wall& Room_mt::ConstIterator::operator*() const
+const Wall& Room::ConstIterator::operator*() const
 {
 	return *m_it;
 }

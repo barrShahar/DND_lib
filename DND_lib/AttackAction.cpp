@@ -52,14 +52,14 @@ namespace dnd_game {
                     {
                         // Monster defeated
                         a_monsterPtr.reset();  // Reset the shared pointer, monster is defeated
-                        a_subject->NotifyAllExcept(a_player, a_player.GetName() + " has defeated the " + nameToAttack + "!");
+                        a_subject->NotifyAllExcept_mt(a_player, a_player.GetName() + " has defeated the " + nameToAttack + "!");
                         actionResponseMessage = "You have defeated the " + nameToAttack + "!";
                     }
                     else
                     {
                         // Monster is still alive
                         a_monsterPtr->SetHP(monsterHp);
-                        a_subject->NotifyAllExcept(a_player, a_player.GetName() + " attacked " + nameToAttack + " and dealt " + std::to_string(a_player.GetDmgPoints()) + " damage.");
+                        a_subject->NotifyAllExcept_mt(a_player, a_player.GetName() + " attacked " + nameToAttack + " and dealt " + std::to_string(a_player.GetDmgPoints()) + " damage.");
                         actionResponseMessage = "You attacked " + nameToAttack + " and dealt " + std::to_string(a_player.GetDmgPoints()) + " damage.";
                     }
 
@@ -81,12 +81,12 @@ namespace dnd_game {
                             if (DidAttack)
                             {
                                 const std::string notifyRoom = a_player.GetName() + " attacked " + other.GetName();
-                                a_subject.get()->NotifyAllExcept({ a_player, other }, notifyRoom);
+                                a_subject.get()->NotifyAllExcept_mt({ a_player, other }, notifyRoom);
                                 actionResponseMessage = "You dealth " + std::to_string(a_player.GetDmgPoints()) + " damage points to " + nameToAttack + "! ";
                                 if (!other.IsAlive())
                                 {
-                                    a_subject.get()->Unregister(other);
-                                    a_subject.get()->NotifyAllExcept(a_player, a_player.GetName() + " killed " + other.GetName() + "!!");
+                                    a_subject.get()->Unregister_mt(other);
+                                    a_subject.get()->NotifyAllExcept_mt(a_player, a_player.GetName() + " killed " + other.GetName() + "!!");
                                     actionResponseMessage = "You've killed " + other.GetName() + "!";
                                     other.NotifyPlayer(ENDL + ENDL + ENDL + "****** Your'e Dead!! ******" + ENDL + "****** End Of Game ******");
                                 }

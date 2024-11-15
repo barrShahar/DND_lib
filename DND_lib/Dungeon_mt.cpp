@@ -22,7 +22,7 @@ Number Dungeon_mt::GetEntryRoom() const
 	return Dungeon_mt::ENTRY_ROOM;
 }
 
-const Room_mt& Dungeon_mt::GetRoom(Number a_roomNumber) const
+const Room& Dungeon_mt::GetRoom(Number a_roomNumber) const
 {
 	return m_rooms[a_roomNumber];
 }
@@ -35,7 +35,7 @@ void Dungeon_mt::DrawRoom(Writer& a_writer, Number a_roomNum, Direction a_player
 std::string Dungeon_mt::Walk_mt(Player& a_player)
 {
 	const Direction playerDirection = a_player.GetDirection();
-	Room_mt& currentRoom = m_rooms[a_player.GetRoomNumber()];
+	Room& currentRoom = m_rooms[a_player.GetRoomNumber()];
 
 	if (!currentRoom.isDoor(playerDirection))
 	{
@@ -49,8 +49,8 @@ std::string Dungeon_mt::Walk_mt(Player& a_player)
 	}
 
 
-	currentRoom.Unregister(a_player);	// Unregister player(observer) from the subject(room)
-	m_rooms[newRoomNumber.value()].Register(a_player);	// Register player to the next room
+	currentRoom.Unregister_mt(a_player);	// Unregister_mt player(observer) from the subject(room)
+	m_rooms[newRoomNumber.value()].Register_mt(a_player);	// Register_mt player to the next room
 	a_player.SetRoomNumber(newRoomNumber.value());	
 	
 
@@ -61,14 +61,14 @@ std::string Dungeon_mt::Walk_mt(Player& a_player)
 
 void Dungeon_mt::NotifyRoom(Number a_roomNumber, const std::string& a_message)
 {
-	Room_mt& room = m_rooms.at(a_roomNumber);
-	room.NotifyAll(a_message);
+	Room& room = m_rooms.at(a_roomNumber);
+	room.NotifyAll_mt(a_message);
 }
 
 void Dungeon_mt::NotifyRoomExcept(const Player& a_excludedPlayer, Number a_roomNumber, const std::string& a_message)
 {
-	Room_mt& room = m_rooms.at(a_roomNumber);
-	room.NotifyAllExcept(a_excludedPlayer, a_message);
+	Room& room = m_rooms.at(a_roomNumber);
+	room.NotifyAllExcept_mt(a_excludedPlayer, a_message);
 }
 
 
@@ -78,16 +78,16 @@ bool Dungeon_mt::IsMonsterInTheRoom(Number a_roomNumber)
 	return m_rooms.at(a_roomNumber).ContainsMonster();
 }
 
-std::string Dungeon_mt::GetNames(Number a_roomNumber) const
+std::string Dungeon_mt::GetNames_mt(Number a_roomNumber) const
 {
-	const Room_mt& room = m_rooms.at(a_roomNumber);
-	std::string names = room.GetNames();
-	return room.GetNames();
+	const Room& room = m_rooms.at(a_roomNumber);
+	std::string names = room.GetNames_mt();
+	return room.GetNames_mt();
 }
 
 void Dungeon_mt::ShoutAction(Number a_roomNumber, const std::string& a_message)
 {
-	Room_mt& room = m_rooms.at(a_roomNumber);
+	Room& room = m_rooms.at(a_roomNumber);
 	for (Wall& wall : room)
 	{
 		if (wall.IsDoor())
@@ -100,12 +100,12 @@ void Dungeon_mt::ShoutAction(Number a_roomNumber, const std::string& a_message)
 
 void Dungeon_mt::RegisterPlayer(Player& a_player, Number a_roomNumber)
 {
-	m_rooms.at(a_roomNumber).Register(a_player);
+	m_rooms.at(a_roomNumber).Register_mt(a_player);
 }
 
 void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 {
-	m_rooms.at(a_roomNumber).Unregister(a_player);
+	m_rooms.at(a_roomNumber).Unregister_mt(a_player);
 }
 
 //AttackPlayerResponse Dungeon_mt::AttackPlayer(Number a_roomNumber,
@@ -114,7 +114,7 @@ void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 //											  Number a_dmg, Number a_attackLifePoints)
 //{
 //	// TODO: Find player through subject and attack him
-//	Room_mt& room = m_rooms.at(a_roomNumber);
+//	Room& room = m_rooms.at(a_roomNumber);
 //	AttackPlayerResponse info = room.AttackPlayer(a_attackedName, a_dmg);
 //	Number lifePoints = (a_attackLifePoints > info.GetDamageToThisPlayer()) ?
 //		a_attackLifePoints - info.GetDamageToThisPlayer() : NUMBER_ZERO;
@@ -133,7 +133,7 @@ void Dungeon_mt::UnregisterPlayer(Player& a_player, Number a_roomNumber)
 
 //AttackDragonResponse Dungeon_mt::AttackDragon(Number a_roomNumber, Number a_dmg)
 //{
-//	Room_mt& room = m_rooms.at(a_roomNumber);
+//	Room& room = m_rooms.at(a_roomNumber);
 //	return room.AttackDragon(a_dmg);
 //}
 
@@ -150,14 +150,14 @@ const dnd_game::Rooms Dungeon_mt::CreateDungeon() const
 /*
 	Rooms rooms // return value
 	{
-		Room_mt { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true, nullptr},
-		Room_mt { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false, nullptr },
-		Room_mt { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true, std::make_shared<Dragon>()},
-		Room_mt { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true, std::make_shared<Dragon>() },
-		Room_mt { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true, nullptr },
-		Room_mt { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false, nullptr },
-		Room_mt { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false, nullptr },
-		Room_mt { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true, std::make_shared<Dragon>() },
+		Room { NUMBER_ZERO, make_pair(true,Number(1)),make_pair(false,-1), make_pair(false,-1), make_pair(true, Number(2)), false, true, nullptr},
+		Room { Number(1), make_pair(true,Number(3)),make_pair(true,Number(4)), make_pair(true,NUMBER_ZERO), make_pair(false, -1), false, false, nullptr },
+		Room { Number(2), make_pair(false,-1),make_pair(true,NUMBER_ZERO), make_pair(false,-1), make_pair(false, -1), true, true, std::make_shared<Dragon>()},
+		Room { Number(3), make_pair(true,Number(7)),make_pair(true,Number(5)), make_pair(true,Number(1)), make_pair(false, -1), true, true, std::make_shared<Dragon>() },
+		Room { Number(4), make_pair(true,Number(5)),make_pair(false,Number(-1)), make_pair(false,Number(-1)), make_pair(true, Number(1)), false, true, nullptr },
+		Room { Number(5), make_pair(true,Number(6)),make_pair(false,Number(-1)), make_pair(true,Number(4)), make_pair(true, Number(3)), false, false, nullptr },
+		Room { Number(6), make_pair(false,Number(-1)),make_pair(false,Number(-1)), make_pair(true,Number(5)), make_pair(true, Number(7)), false, false, nullptr },
+		Room { Number(8), make_pair(false,Number(-1)),make_pair(true,Number(6)), make_pair(true,Number(3)), make_pair(false, Number(-1)), true, true, std::make_shared<Dragon>() },
 	};
 	return rooms;
 */
@@ -198,7 +198,7 @@ std::pair<bool,Number> getRandomBool_mt(double a_probability, Number& a_num)
 	return isDoor ? std::make_pair(isDoor, ++a_num) : std::make_pair(isDoor, Number(0));
 }
 
-std::unique_ptr<Room_mt> CreateRoom(Number& a_roomNumber)
+std::unique_ptr<Room> CreateRoom(Number& a_roomNumber)
 {
 	std::array<std::pair<bool,Number>, 4> bools;
 	std::generate(bools.begin(), bools.end(), [&] ()
@@ -206,7 +206,7 @@ std::unique_ptr<Room_mt> CreateRoom(Number& a_roomNumber)
 					  return getRandomBool_mt(IS_DOOR_PROBABILITY, a_roomNumber);
 				  });
 
-	Room_mt
+	Room
 	{
 	a_roomNumber,
 	bools.at(0),
@@ -217,7 +217,7 @@ std::unique_ptr<Room_mt> CreateRoom(Number& a_roomNumber)
 	getRandomBool_mt(IS_TREASURE_PROBABILITY)
 	};
 
-	std::unique_ptr<Room_mt> returnValue = std::make_unique<Room_mt>(
+	std::unique_ptr<Room> returnValue = std::make_unique<Room>(
 		a_roomNumber,
 		bools.at(0),
 		bools.at(1),

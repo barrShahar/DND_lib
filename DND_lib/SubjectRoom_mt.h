@@ -17,15 +17,15 @@ public:
     SubjectRoom_mt& operator=(const SubjectRoom_mt& a_other) = delete;
     ~SubjectRoom_mt() = default;
 
-    std::string GetNames() const;
+    std::string GetNames_mt() const;
     std::vector<std::string> GetNamesVec() const;
     std::optional<std::reference_wrapper<Player>> GetPlayer(const std::string& a_player);
 
-    virtual void Register(Player& a_player);
-    virtual void Unregister(Player& a_player);
-    virtual void NotifyAllExcept(const Player& a_player, const std::string& a_message);
-    virtual void NotifyAllExcept(const std::vector<std::reference_wrapper<Player>>& a_excludedPlayers, const std::string& a_message);
-    virtual void NotifyAll(const std::string& a_message);
+    virtual void Register_mt(Player& a_player);
+    virtual void Unregister_mt(Player& a_player);
+    virtual void NotifyAllExcept_mt(const Player& a_player, const std::string& a_message);
+    virtual void NotifyAllExcept_mt(const std::vector<std::reference_wrapper<Player>>& a_excludedPlayers, const std::string& a_message);
+    virtual void NotifyAll_mt(const std::string& a_message);
     //AttackPlayerResponse AttackPlayer(const std::string& a_playerToAttack, Number a_dmg);
 private:
     // std::vector<std::unique_ptr<ObserverPlayer_mt>> m_observers;

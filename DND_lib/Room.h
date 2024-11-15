@@ -14,11 +14,11 @@ namespace dnd_game
 {
 
 // Dungeon room
-class Room_mt
+class Room
 {
 public:
     using Walls = std::array<Wall, 4>;
-    explicit Room_mt(Number a_roomNumber,
+    explicit Room(Number a_roomNumber,
                   std::pair<bool, Number> a_isDoorNorth,
                   std::pair<bool, Number> a_isDoorEast,
                   std::pair<bool, Number> a_isDoorSouth,
@@ -27,19 +27,19 @@ public:
                   std::shared_ptr<Monster> a_monsterPtr
         );
 
-    Room_mt(const Room_mt& a_other) = delete;
-    Room_mt(Room_mt&&) noexcept;  // Allow move construction
-    Room_mt& operator=(Room_mt&&) noexcept = default;  // Allow move assignment
-    Room_mt& operator=(const Room_mt& a_other) = delete;
-    ~Room_mt() = default;
+    Room(const Room& a_other) = delete;
+    Room(Room&&) noexcept;  // Allow move construction
+    Room& operator=(Room&&) noexcept = default;  // Allow move assignment
+    Room& operator=(const Room& a_other) = delete;
+    ~Room() = default;
 
-    std::string GetNames() const;
+    std::string GetNames_mt() const;
     std::vector<std::string> GetNamesVec() const;
     std::optional<std::shared_ptr<Monster>> GetMonster();
     void DrawRoom(Writer& a_wrier, Direction a_direction);
     bool isDoor(Direction a_direction) const;
     bool ContainsMonster() const;
-    bool IsTreasure() const;
+    bool IsTreasure_mt() const;
     std::optional<Number> GetNextDoorRoomNumber(Direction a_direction) const;
 
  /*   AttackPlayerResponse AttackPlayer(const std::string& a_attackedName, Number a_dmg);
@@ -47,10 +47,19 @@ public:
 
 
     std::optional<TREASURE_TYPE> GetTreasure_mt();
-    void Register(Player& a_player);
-    void Unregister(Player& a_player);
-    void NotifyAll(const std::string& a_message);
-    void NotifyAllExcept(const Player& a_excludedPlayer, const std::string& a_message);
+
+
+    void Register_mt(Player& a_player);
+    void Register_NoLock(Player& a_player);
+
+    void Unregister_mt(Player& a_player);
+    void Unregister_NoLock(Player& a_player);
+
+    void NotifyAll_mt(const std::string& a_message);
+    void NotifyAll_NoLock(const std::string& a_message);
+
+    void NotifyAllExcept_mt(const Player& a_excludedPlayer, const std::string& a_message);
+    void NotifyAllExcept_NoLock(const Player& a_excludedPlayer, const std::string& a_message);
 
     // Template method to lock player instance during callable execution
     template <typename Func>
@@ -111,7 +120,7 @@ private:
 
 // Template function definition
 template <typename Func>
-inline void Room_mt::WithLock(Func func) {
+inline void Room::WithLock(Func func) {
     std::unique_lock<std::shared_mutex> lock(m_mutex);
     func(m_monsterPtr, m_subject);
 }

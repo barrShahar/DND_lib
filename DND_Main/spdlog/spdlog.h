@@ -89,7 +89,7 @@ inline void flush_every(std::chrono::duration<Rep, Period> interval)
 // Set global error handler
 SPDLOG_API void set_error_handler(void (*handler)(const std::string &msg));
 
-// Register the given logger with the given name
+// Register_mt the given logger with the given name
 SPDLOG_API void register_logger(std::shared_ptr<logger> logger);
 
 // Apply a user defined function on all registered loggers

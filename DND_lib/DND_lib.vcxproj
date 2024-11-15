@@ -151,7 +151,6 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon_mt.h" />
-    <ClInclude Include="GameServer.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameParams.h" />
     <ClInclude Include="ObserverPlayer_mt.h" />
@@ -179,7 +178,6 @@
     <ClCompile Include="DND_lib.cpp" />
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Dungeon_mt.cpp" />
-    <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameParams.cpp" />
     <ClCompile Include="IAttackable.cpp" />

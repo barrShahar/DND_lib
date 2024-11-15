@@ -50,7 +50,7 @@ void GameServer::WaitForClient()
             // Create a player instance with the given name
             dnd_game::Player player(userName, m_dungeon.GetEntryRoom(), *netWriter);
 
-            // Register the player to the dungeon
+            // Register_mt the player to the dungeon
             m_dungeon.RegisterPlayer(player, player.GetRoomNumber());
             std::cout << "Registered player " << player.GetName() << " into room " << player.GetRoomNumber() << std::endl;
 
