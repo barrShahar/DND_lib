@@ -9,7 +9,7 @@ namespace dnd_game
 class Monster : public IAttackable 
 {
 public:
-    explicit Monster(Number a_maxHealth, Number a_attackDmg);
+    Monster(Number a_maxHealth, Number a_ttackDmg, const std::string& a_adressedName);
     Monster(const Monster& a_other) = delete;
     Monster& operator=(const Monster& a_other) = delete;
     // Defaulted or custom move constructor
@@ -24,11 +24,13 @@ public:
     Number GetHP() const;
     void SetHP(Number a_hp);
 
-    virtual void TakeDamage(Number damage);
+    // Attackable interface
+    virtual std::unique_ptr<AttackResponse> TakeDamage(Number damage);
     virtual bool IsInPlay() const;
 
 private:
     Number m_healthPoints;
     Number m_attackDmg;
+    std::string const m_adressedName;
 };
 }  // namespace dnd_game

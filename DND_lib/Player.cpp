@@ -59,7 +59,7 @@ const std::string Player::GetArguments() const
 
 const bool Player::IsAlive() const
 {
-	assert(m_hp >= 0, "Players hp became negative!");
+	assert(m_hp >= 0 && "Players hp became negative!");
 	return (m_hp > 0);
 }
 
@@ -89,14 +89,35 @@ void Player::SetArguments(std::string a_commandArguemnts)
 	m_commandArguemnts = a_commandArguemnts;
 }
 
-void Player::TakeDamage(Number a_damage)
+std::unique_ptr<AttackResponse> Player::TakeDamage_mt(Number a_damage)
 {
-	SetHealthPoints(std::max(0, GetHealthPoints()));
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		Number hp = GetHP();
+		SetHP(std::max(0, hp - a_damage));
+		return std::make_unique<AttackResponse>(m_name, IsInPlay(), hp, GetHP(), ReturnedDamage(a_damage));
+	}
 }
+
 
 bool Player::IsInPlay() const
 {
 	return IsAlive();
+}
+
+Number Player::ReturnedDamage(Number a_damage) const
+{
+	return 0;
+}
+
+Number Player::GetHP() const
+{
+	return GetHealthPoints();
+}
+
+void Player::SetHP(Number a_hp)
+{
+	SetHealthPoints(a_hp);
 }
 
 }	// dnd_game

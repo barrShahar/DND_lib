@@ -2,9 +2,10 @@
 
 namespace dnd_game
 {
-Monster::Monster(Number a_maxHealth, Number a_ttackDmg)
+Monster::Monster(Number a_maxHealth, Number a_ttackDmg, const std::string& a_adressedName)
 	: m_healthPoints { a_maxHealth }
 	, m_attackDmg { a_ttackDmg }
+	, m_adressedName { a_adressedName }
 {
 	// Ctor
 }
@@ -31,9 +32,11 @@ void Monster::SetHP(Number a_hp)
 	m_healthPoints = a_hp;
 }
 
-void Monster::TakeDamage(Number damage)
+std::unique_ptr<AttackResponse> Monster::TakeDamage(Number damage)
 {
-	SetHP(std::max(0, damage));
+	Number hp = GetHP();
+	SetHP(std::max(0, hp - damage));
+	return std::make_unique<AttackResponse>(m_adressedName, IsInPlay(), hp, GetHP(), ReturnedDamage(damage));
 }
 
 bool Monster::IsInPlay() const

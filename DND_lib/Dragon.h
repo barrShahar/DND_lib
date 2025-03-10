@@ -20,6 +20,7 @@ public:
 
     // Iattackable Interface
     virtual const std::string& GetName() const;
+    virtual Number ReturnedDamage(Number a_damage) const override;
 
 
 
