@@ -51,6 +51,7 @@ private:
     mutable std::mutex m_mtx;
     std::condition_variable m_dungeonGuard;
     Rooms m_rooms;
+    
 };
 
 template <typename Func>

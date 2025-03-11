@@ -23,6 +23,7 @@ public:
 
     virtual void Register_mt(Player& a_player);
     virtual void Unregister_mt(Player& a_player);
+    virtual void NotifyPlayer_mt(const std::string& a_playerName, const std::string& a_message);
     virtual void NotifyAllExcept_mt(const Player& a_player, const std::string& a_message);
     virtual void NotifyAllExcept_mt(const std::vector<std::reference_wrapper<Player>>& a_excludedPlayers, const std::string& a_message);
     virtual void NotifyAll_mt(const std::string& a_message);

@@ -34,9 +34,14 @@ namespace dnd_game {
         return didAttack;
     }
 
+    Number InflictedDamage(const AttackResponsePtr& a_attackResponse)
+    {
+        return a_attackResponse->originalHp - a_attackResponse->currentHp;
+    }
+
     std::string const RoomAttackedMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
     {
-        return a_attackerName + " attacked " + a_attackResponse->adressedNameMsg + " for " + std::to_string(a_attackResponse->returnedDmg) + " damage.";
+        return a_attackerName + " attacked " + a_attackResponse->adressedNameMsg + " for " + std::to_string(InflictedDamage(a_attackResponse)) + " damage.";
     }
 
     std::string const AtackableLostHpMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
@@ -46,7 +51,7 @@ namespace dnd_game {
 
     std::string const YourLostHpMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
     {
-        return "You've been attacked back by " + a_attackResponse->adressedNameMsg + " for " + std::to_string(a_attackResponse->returnedDmg) + " damage.";
+        return "Your HP decreased from " + std::to_string(a_attackResponse->originalHp) + " to " + std::to_string(a_attackResponse->currentHp) + " damage.";
     }
 
     std::string const YourHpMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
@@ -56,7 +61,8 @@ namespace dnd_game {
 
     std::string const YouAttackedMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
     {
-        return "You've attacked " + a_attackResponse->adressedNameMsg + " for " + std::to_string(a_attackResponse->returnedDmg) + " damage.";
+        Number const inflictedDamage = a_attackResponse->originalHp - a_attackResponse->currentHp;
+        return "You've attacked " + a_attackResponse->adressedNameMsg + " for " + std::to_string(inflictedDamage) + " damage.";
     }
 
     std::string const YouWereAttackedBackMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
@@ -64,9 +70,10 @@ namespace dnd_game {
         return "You've been attacked back by " + a_attackResponse->adressedNameMsg + " for " + std::to_string(a_attackResponse->returnedDmg) + " damage.";
     }
 
-    std::string const YouWereAttackedMsg(const std::string& a_attackerName, const std::string& a_targetName, const AttackResponsePtr& a_attackResponse)
+    std::string const YouWereAttackedMsg(const std::string& a_attackerName, const std::string& a_attackerAdressName, const AttackResponsePtr& a_attackResponse)
     {
-        return "You've been attacked by " + a_attackResponse->adressedNameMsg + " for " + std::to_string(a_attackResponse->returnedDmg) + " damage.";
+        Number inflictedDamage = InflictedDamage(a_attackResponse);
+        return "You've been attacked by " + a_attackerAdressName + " for " + std::to_string(inflictedDamage) + " damage.";
     }
 
     std::string const YouBeenKilledMsg(const std::string& a_attackerName, const AttackResponsePtr& a_attackResponse)
@@ -86,7 +93,6 @@ namespace dnd_game {
 
     std::unique_ptr<ActionResponse> AttackAction::Act(Dungeon_mt& a_dungeon, Player& a_player) const
     {
-        
         // Get the room number of the player
         const Number playerRoomNumber = a_player.GetRoomNumber();
 
@@ -94,22 +100,23 @@ namespace dnd_game {
         const Room& room = a_dungeon.GetRoom(playerRoomNumber);
 
         // Lock room via dungeon (encapsulation):
-        a_dungeon.ExecuteWithRoomLock(playerRoomNumber, [&a_player](Room& room)
+        std::unique_ptr<ActionResponse> result = std::make_unique<StringActionResponse>("This is a test.");;
+        a_dungeon.ExecuteWithRoomLock(playerRoomNumber, [&a_player, &result](Room& room)
         {
             // find the Attackable object in the room:
             std::string const& attackable_name = a_player.GetArguments();
             std::optional<std::reference_wrapper<IAttackable>> attackable_opt = room.GetAttackable_NoLock(attackable_name);
             if (!attackable_opt.has_value())
             {
-                return std::make_unique<StringActionResponse>("Target '" + attackable_name + "' was not found in this room.");
+                result = std::make_unique<StringActionResponse>("Target '" + attackable_name + "' was not found in this room."); 
+                return;
             }
 
             // attack the attackable object:
             IAttackable& attackable = attackable_opt.value();
-            AttackResponsePtr attackResponse = attackable.TakeDamage(a_player.GetDmgPoints());
+            AttackResponsePtr const attackableResponse = attackable.TakeDamage(a_player.GetDmgPoints());
             
-
-            Number const returnedDamage = attackResponse->returnedDmg;
+            Number const returnedDamage = attackableResponse->returnedDmg;
             AttackResponsePtr playerAttackResponse = a_player.TakeDamage(returnedDamage);
 
             // Notify room, attcker, and attackable:
@@ -121,80 +128,73 @@ namespace dnd_game {
                 if (playerName == a_player.GetName())
                 {
                     // send attackable message via method that I will do in the next task
-                    a_player.NotifyPlayer(YouAttackedMsg(a_player.GetName(), attackable_name, attackResponse));
-                    a_player.NotifyPlayer(AtackableLostHpMsg(a_player.GetName(), attackable_name, attackResponse));
+                    a_player.NotifyPlayer(YouAttackedMsg(a_player.GetName(), attackable_name, attackableResponse));
+                    a_player.NotifyPlayer(AtackableLostHpMsg(a_player.GetName(), attackable_name, attackableResponse));
 
-                    if (attackResponse->returnedDmg > 0)
+                    if (playerAttackResponse->returnedDmg > 0)
                     {
-                        a_player.NotifyPlayer(YouWereAttackedMsg(a_player.GetName(), attackable_name, attackResponse));
+                        a_player.NotifyPlayer(YouWereAttackedMsg(a_player.GetName(), attackable_name, attackableResponse));
                         a_player.NotifyPlayer(AtackableLostHpMsg(a_player.GetName(), attackable_name, playerAttackResponse));
                     }
 
-                    if (attackResponse->isDead)
+                    if (!attackableResponse->isInPlay)
                     {
-                        a_player.NotifyPlayer(YouKilledMsg(a_player.GetName(), attackResponse));
+                        a_player.NotifyPlayer(YouKilledMsg(a_player.GetName(), attackableResponse));
                     }
 
-                    if (playerAttackResponse->isDead)
+                    if (!playerAttackResponse->isInPlay)
                     {
                         a_player.NotifyPlayer(YouBeenKilledMsg(a_player.GetName(), playerAttackResponse));
-                        room.Unregister_mt(a_player);
+                        room.Unregister_NoLock(a_player);
                     }
-
-
                 }
-
                 else if (playerName == attackable_name)
                 {
-                    /* 
-                    room.NotifyPlayer(playerName, YouWereAttackedMsg(a_player.GetName(), attackableMessageName, attackResponse));
-                    room.NotifyPlayer(playerName, YourLostHpMsg(a_player.GetName(), attackableMessageName, playerAttackResponse));
-                    */
-                   if (attackResponse->returnedDmg > 0)
+                    
+                    room.NotifyPlayer_NoLock(playerName, YouWereAttackedMsg(a_player.GetName(), attackableMessageName, attackableResponse));
+                    room.NotifyPlayer_NoLock(playerName, YourLostHpMsg(a_player.GetName(), attackableMessageName, attackableResponse));
+                    
+                   if (attackableResponse->returnedDmg > 0)
                    {
                     room.NotifyPlayer_NoLock(playerName, YouAttackedMsg(playerName, a_player.GetName(), playerAttackResponse));
                     room.NotifyPlayer_NoLock(playerName, AtackableLostHpMsg(playerName, a_player.GetName(), playerAttackResponse));
                    }
 
-                    if (playerAttackResponse->isDead)
+                    if (!playerAttackResponse->isInPlay)
                     {
                         room.NotifyPlayer_NoLock(playerName, YouKilledMsg(a_player.GetName(), playerAttackResponse));
                     }
-                    if (attackResponse->isDead)
+                    if (!attackableResponse->isInPlay)
                     {
-                        room.NotifyPlayer_NoLock(playerName, YouBeenKilledMsg(a_player.GetName(), attackResponse));
-                        room.Unregister_mt(a_player);
+                        room.NotifyPlayer_NoLock(playerName, YouBeenKilledMsg(a_player.GetName(), attackableResponse));
+                        room.Unregister_NoLock(attackable_name);
                     }
                 }
-
                 else
                 {
-                    // Todo notify other players
-                    room.NotifyPlayer_NoLock(playerName, RoomAttackedMsg(a_player.GetName(), attackable_name, attackResponse));
-                    room.NotifyPlayer_NoLock(playerName, AtackableLostHpMsg(a_player.GetName(), attackable_name, attackResponse));
+                    room.NotifyPlayer_NoLock(playerName, RoomAttackedMsg(a_player.GetName(), attackable_name, attackableResponse));
+                    room.NotifyPlayer_NoLock(playerName, AtackableLostHpMsg(a_player.GetName(), attackable_name, attackableResponse));
 
-                    if (attackResponse->returnedDmg > 0)
+                    if (attackableResponse->returnedDmg > 0)
                     {
-                        room.NotifyPlayer_NoLock(playerName, RoomAttackedMsg(playerName, a_player.GetName(), attackResponse));
+                        room.NotifyPlayer_NoLock(playerName, RoomAttackedMsg(playerName, a_player.GetName(), attackableResponse));
                         room.NotifyPlayer_NoLock(playerName, AtackableLostHpMsg(a_player.GetName(), attackable_name, playerAttackResponse));
                     }
 
-                    if (attackResponse->isDead)
+                    if (!attackableResponse->isInPlay)
                     {
-                        room.NotifyPlayer_NoLock(playerName, RoomKillMsg(a_player.GetName(),attackable_name, attackResponse));
+                        room.NotifyPlayer_NoLock(playerName, RoomKillMsg(a_player.GetName(),attackable_name, attackableResponse));
                     }
 
-                    if (playerAttackResponse->isDead)
+                    if (!playerAttackResponse->isInPlay)
                     {
-                        room.NotifyPlayer_NoLock(playerName, YouBeenKilledMsg(a_player.GetName(), attackResponse));
-                        room.Unregister_mt(a_player);
+                        room.NotifyPlayer_NoLock(playerName, YouBeenKilledMsg(a_player.GetName(), attackableResponse));
+                        room.Unregister_NoLock(a_player);
                     }
-
-               
-            }
-          
-        }
-
+                }
+            } 
+        });
+        return result;
     } 
 
 } // namespace dnd_game

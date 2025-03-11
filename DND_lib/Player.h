@@ -8,7 +8,7 @@
 namespace dnd_game {
 
 static constexpr Number INITIAL_HEALTH_POINTS = 100;
-static constexpr Number INITIAL_ATTACK_POINTS = 20;
+static constexpr Number INITIAL_ATTACK_POINTS = 60;
 
 class Player : public IAttackable
 {
@@ -41,8 +41,11 @@ public:
     void SetArguments(std::string a_arguemnts);
 
     // Attackable Interface
-    virtual void TakeDamage(Number damage);
+    virtual std::unique_ptr<AttackResponse> TakeDamage_mt(Number damage); 
     virtual bool IsInPlay() const;
+    virtual Number ReturnedDamage(Number a_damage) const override;
+    virtual Number GetHP() const;
+    virtual void SetHP(Number a_hp);
 
 private:
     const std::string m_name;

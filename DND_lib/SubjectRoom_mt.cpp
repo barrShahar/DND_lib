@@ -62,6 +62,20 @@ void SubjectRoom_mt::Unregister_mt(Player& a_player)
 	}
 }
 
+void SubjectRoom_mt::NotifyPlayer_mt(const std::string& a_playerName, const std::string& a_message)
+{
+	{ // gaurd	
+		std::lock_guard<std::mutex> lock(m_roomMutex);
+		for (std::pair<std::string const, std::unique_ptr<ObserverPlayer_mt>>& pair : m_observersMap)
+		{
+			if (pair.first == a_playerName)
+			{
+				pair.second.get()->Notify(a_message);
+			}
+		}
+	}
+}
+
 void SubjectRoom_mt::NotifyAllExcept_mt(const Player& a_player, const std::string& a_message)
 {
 	{	// gaurd

@@ -73,6 +73,16 @@ std::optional<std::shared_ptr<Monster>> Room::GetMonster()
 	return m_monsterPtr;
 }
 
+std::optional<std::reference_wrapper<IAttackable>> Room::GetAttackable_NoLock(const std::string& name) const
+{
+	if (m_monsterPtr && m_monsterPtr->GetName() == name)
+	{
+		return { *m_monsterPtr };
+	}
+
+	return m_subject->GetPlayer(name);
+}
+
 
 
 void Room::DrawRoom(Writer& a_wrier, Direction a_direction)
@@ -149,6 +159,11 @@ std::optional<TREASURE_TYPE> Room::GetTreasure_mt()
 	
 }
 
+std::shared_ptr<Monster> Room::GetMonsterPtr()
+{
+	return m_monsterPtr;
+}
+
 void Room::Register_mt(Player& a_player)
 {
 	{	// guard 
@@ -176,6 +191,21 @@ void Room::Unregister_NoLock(Player& a_player)
 {
 	m_subject.get()->NotifyAll_mt(a_player.GetName() + " has left the room");
 	m_subject.get()->Unregister_mt(a_player);
+}
+
+void Room::Unregister_NoLock(const std::string a_playerName)
+{
+	std::optional<std::reference_wrapper<Player>> toUnregister = m_subject.get()->GetPlayer(a_playerName);
+	if (toUnregister.has_value())
+	{
+		Player& playerToUnregister = toUnregister.value();
+		Unregister_NoLock(playerToUnregister);
+	}
+}
+
+void Room::NotifyPlayer_NoLock(const std::string& a_playerName, const std::string& a_message)
+{
+	m_subject.get()->NotifyPlayer_mt(a_playerName, a_message);
 }
 
 void Room::NotifyAll_mt(const std::string& a_message)

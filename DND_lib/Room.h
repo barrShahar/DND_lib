@@ -36,17 +36,21 @@ public:
     std::string GetNames_mt() const;
     std::vector<std::string> GetNamesVec() const;
     std::optional<std::shared_ptr<Monster>> GetMonster();
+    std::optional<std::reference_wrapper<IAttackable>> GetAttackable_NoLock(const std::string& name) const;
     void DrawRoom(Writer& a_wrier, Direction a_direction);
     bool isDoor(Direction a_direction) const;
     bool ContainsMonster() const;
     bool IsTreasure_mt() const;
+
+
     std::optional<Number> GetNextDoorRoomNumber(Direction a_direction) const;
+    std::optional<TREASURE_TYPE> GetTreasure_mt();
+    std::shared_ptr<Monster> GetMonsterPtr();
 
  /*   AttackPlayerResponse AttackPlayer(const std::string& a_attackedName, Number a_dmg);
     AttackDragonResponse AttackDragon(Number a_dmg);*/
 
 
-    std::optional<TREASURE_TYPE> GetTreasure_mt();
 
 
     void Register_mt(Player& a_player);
@@ -54,6 +58,10 @@ public:
 
     void Unregister_mt(Player& a_player);
     void Unregister_NoLock(Player& a_player);
+
+    void Unregister_NoLock(const std::string a_playerName);
+
+    void NotifyPlayer_NoLock(const std::string& a_playerName, const std::string& a_message);
 
     void NotifyAll_mt(const std::string& a_message);
     void NotifyAll_NoLock(const std::string& a_message);
@@ -101,10 +109,11 @@ public:
         Walls::const_iterator m_it;
     };
 
+    // Const version for iteration
     ConstIterator cbegin() const;
     ConstIterator cend() const;
-    ConstIterator begin() const; // Const version for iteration
-    ConstIterator end() const;   // Const version for iteration
+    ConstIterator begin() const; 
+    ConstIterator end() const;   
 
 private:
     Walls m_walls;
@@ -122,7 +131,7 @@ private:
 template <typename Func>
 inline void Room::WithLock(Func func) {
     std::unique_lock<std::shared_mutex> lock(m_mutex);
-    func(m_monsterPtr, m_subject);
+    func(*this);
 }
 
 }  // namespace dnd_game
