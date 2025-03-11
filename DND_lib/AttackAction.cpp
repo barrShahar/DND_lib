@@ -7,6 +7,16 @@
 #include <cassert>
 #include <optional>
 
+/** *********************************************************************************************************************
+// *** This is initial implementation of the attack action. ***
+// TODO: 
+    1) Do more dependency injection to improve encapsulation.
+    2) Fix notification order of the attacker.
+    3) Improve dry code
+    4) Improve class Room encapsulation if possible.
+    5) Improve effiency of observer lookup (use unordered_map)  
+// *********************************************************************************************************************
+*/
 namespace dnd_game {
 
     using AttackResponsePtr = std::unique_ptr<AttackResponse>;
